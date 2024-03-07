@@ -1,0 +1,16 @@
+.header{
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  padding: 1rem 11%;
+}
+
+.header__logo {
+  width: 8rem;
+}
+
+.header__user__profile{
+  width: 3rem;
+  height: 3rem;
+}

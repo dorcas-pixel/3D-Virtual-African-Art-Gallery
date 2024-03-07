@@ -1,0 +1,11 @@
+Model Information:
+* title:	White-room1
+* source:	https://sketchfab.com/3d-models/white-room1-26a61fba0d5d41dcbe01478de9831218
+* author:	natcrot (https://sketchfab.com/natcrot)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "White-room1" (https://sketchfab.com/3d-models/white-room1-26a61fba0d5d41dcbe01478de9831218) by natcrot (https://sketchfab.com/natcrot) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,0 +1,68 @@
+.account{
+  margin-top: 11rem;
+  padding: 0 10%;
+}
+
+.account__user{
+  flex: 0 0 30rem;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  padding: 2rem;
+  margin-right: 3rem;
+}
+
+.account__user__name{
+  margin: 3rem 0 0;
+}
+
+.account__user button{
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.account__user__profile{
+  width: 17rem;
+  height: 17rem;
+}
+
+.account__title{
+  margin-bottom: 2.2rem;
+}
+
+.account__works{
+  flex: 1;
+}
+
+.account__works__tabs li{
+  background-color: #999;
+  padding: .3rem 1rem;
+  color: #eee;
+}
+
+.account__works__tabs li:not(:last-child){
+  margin-right: 1rem;
+}
+
+.account__works__tabs__active{
+  background-color: var(--primary-2) !important;
+}
+
+.account__works__list{
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 3rem;
+}
+
+.account__works__add{
+  flex-direction: column;
+  border: 2px dashed #eee;
+  border-radius: 6px;
+  height: calc(100% - 5rem);
+}
+
+.account__works__add svg{
+  margin-bottom: .3rem;
+}

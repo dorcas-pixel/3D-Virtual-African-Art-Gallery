@@ -1,0 +1,102 @@
+import Artwork from "../models/Artwork";
+
+import v from "../helpers/Validation";
+
+import { IAny, IResponse } from "../interfaces";
+
+import path from "path";
+import decompress from "decompress";
+import ArtWorkServices from "./Artwork";
+
+export default class ArtModelServices {
+  static async addModelThumbnail(body: IAny, req: IAny): Promise<void> {
+    try {
+      if (!req.files[0]) throw "Please upload proper thumbnail";
+
+      const artwork = await ArtWorkServices.getNotReadyOrMakeNew(
+        req.store.userInfo._id,
+        "model"
+      );
+
+      artwork.image = req.files[0].filename;
+      artwork.hasImage = true;
+      artwork.save();
+
+      req.success = true;
+      req.thumbnail = req.files[0].filename;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  static async addModelFile(body: IAny, req: IAny): Promise<void> {
+    try {
+      if (!req.files[0]) throw "Please upload proper file";
+
+      // unzip the folder
+      const modelsPath = path.join(
+        __dirname,
+        `../../public/assets/uploads/artwork/models`
+      );
+
+      const zipFolder = req.files[0].filename;
+      const folder = zipFolder.split(".zip");
+
+      await decompress(
+        `${modelsPath}/${zipFolder}`,
+        `${modelsPath}/${folder[0]}`
+      );
+
+      const artwork = await ArtWorkServices.getNotReadyOrMakeNew(
+        req.store.userInfo._id,
+        "model"
+      );
+
+      if (!artwork.model) artwork.model = {};
+
+      artwork.model.folder = folder[0];
+
+      artwork.hasModel = true;
+      artwork.save();
+
+      req.art = artwork.toJSON();
+
+      req.success = true;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  static async addModelDetails(
+    wrapRes: IResponse,
+    body: IAny,
+    { userInfo }: IAny
+  ): Promise<IResponse> {
+    try {
+      const artwork = await ArtWorkServices.getNotReadyOrMakeNew(
+        userInfo._id,
+        "model"
+      );
+
+      // if (!artwork.hasImage) throw 'Please upload a thumbnail first';
+      if (!artwork.hasModel) throw "Please upload a model file first";
+
+      if (!artwork.model) artwork.model = {};
+
+      artwork.model.type = "gltf";
+      artwork.model.file = body.fileName;
+      artwork.name = body.name;
+      // artwork.name = body.description;
+      artwork.isReady = true;
+
+      artwork.save();
+
+      wrapRes.art = artwork.toJSON();
+      wrapRes.successful = true;
+
+      return wrapRes;
+    } catch (e) {
+      throw e;
+    }
+  }
+}

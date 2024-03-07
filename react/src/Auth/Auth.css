@@ -1,0 +1,34 @@
+.auth{
+  gap: 1rem;
+}
+
+.auth__main, .auth__illustration{
+  flex: 1;
+}
+
+.auth__main__form{
+  width: 35rem;
+  margin: 7rem auto 2rem;
+  background-color: #fff;
+  border-radius: 6px;
+  padding: 2rem;
+  box-shadow: 0 0 1px #000;
+}
+
+.auth__main__form__body{
+  margin: 2rem 0;
+}
+
+.auth__main__form__body > .input:not(:last-child){
+  margin-bottom: 1.1rem;
+}
+
+.auth__illustration{
+  height: 100vh;
+  filter: brightness(.6);
+}
+
+.auth__main img{
+  width: 10rem;
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,11 @@
+Model Information:
+* title:	LITTLE HOUSE
+* source:	https://sketchfab.com/3d-models/little-house-0aa4250d691042a2a5000b64a59b245b
+* author:	The_Cubest (https://sketchfab.com/The_Cubest)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "LITTLE HOUSE" (https://sketchfab.com/3d-models/little-house-0aa4250d691042a2a5000b64a59b245b) by The_Cubest (https://sketchfab.com/The_Cubest) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,0 +1,15 @@
+.art-item__background{
+  height: 15rem;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.art-item__details{
+  padding: .5rem;
+}
+
+.art-item__details__profile{
+  width: 3rem;
+  height: 3rem;
+  margin-right: 1rem;
+}

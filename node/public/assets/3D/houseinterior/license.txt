@@ -1,0 +1,11 @@
+Model Information:
+* title:	House_[1F interior]
+* source:	https://sketchfab.com/3d-models/house-1f-interior-160df5b536274da5805ed969aea8afc2
+* author:	yuuuusukeeee (https://sketchfab.com/yuuuusukeeee)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "House_[1F interior]" (https://sketchfab.com/3d-models/house-1f-interior-160df5b536274da5805ed969aea8afc2) by yuuuusukeeee (https://sketchfab.com/yuuuusukeeee) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
