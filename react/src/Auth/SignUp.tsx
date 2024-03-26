@@ -4,7 +4,7 @@ import { postWithNoAuth } from "../helpers/http";
 import { getValueById } from "../helpers/dom";
 import { id } from "../helpers/string";
 
-import "./auth.css"
+import "./Auth.css"
 
 export default () => {
   const [username, setUsername] = useState(null) as any;
