@@ -4,9 +4,9 @@ import Session from "../Auth/Session"
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { postWithAuth } from "../helpers/http";
+import { SERVERURL } from "../helpers/URL";
 
 import "./Cart.css"
-import { SERVERURL } from "../helpers/URL";
 
 export const Popup = (props: any) => {
   setTimeout(() => props.clearPopup(), 3000)

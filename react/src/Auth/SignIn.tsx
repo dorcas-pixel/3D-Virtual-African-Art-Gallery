@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { postWithNoAuth } from "../helpers/http";
 import { getValueById } from "../helpers/dom";
 
-import "./auth.css";
+import "./auth.css"
 
 export default () => {
   const [username, setUsername] = useState(null) as any;
