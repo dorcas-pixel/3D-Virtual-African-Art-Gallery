@@ -1,5 +1,3 @@
-export const SERVERURL = "http://localhost:3132";
-
 export const getQuery = (key: string) =>
   new URLSearchParams(location.search).get(key);
 

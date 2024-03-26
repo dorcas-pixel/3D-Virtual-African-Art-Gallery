@@ -1,5 +1,4 @@
 import axios from "axios";
-import { SERVERURL } from "./URL";
 import { getCookieValue } from "./cookies";
 
 const session = new Map();
@@ -9,7 +8,7 @@ const headers: any = {
 };
 
 export const post = async (url: string, options: any) => {
-  const res = await fetch(`${SERVERURL}${url}`, {
+  const res = await fetch(`${url}`, {
     method: "POST",
     body: JSON.stringify(options.body),
     headers: options.headers,
@@ -69,7 +68,7 @@ export const postWithNoAuth = async (
 };
 
 export const postWithAxios = async (url: string, body: any, options?: any) => {
-  const res = await axios.post(`${SERVERURL}${url}`, body, {
+  const res = await axios.post(`${url}`, body, {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${getCookieValue("_gallery_sesh")}`,

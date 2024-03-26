@@ -2,7 +2,6 @@ import * as T3 from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
-import { SERVERURL } from "./URL";
 import { getFramesByRoom } from "./artwork";
 
 interface IVec {
@@ -143,7 +142,7 @@ export default class T3Helper {
 
     var material = new T3.MeshLambertMaterial({
       map: loader.load(
-        `${SERVERURL}/assets/uploads/artwork/portraits/${image}`
+        `/assets/uploads/artwork/portraits/${image}`
       ),
     });
 
@@ -172,7 +171,7 @@ export default class T3Helper {
     if (!this.lastClosestStand) return;
 
     this.loader.load(
-      `${SERVERURL}/assets/uploads/artwork/models/${artwork.model.folder}/scene.gltf`,
+      `/assets/uploads/artwork/models/${artwork.model.folder}/scene.gltf`,
       (gltf) => {
         gltf.scene.children[0].scale.set(0.01, 0.01, 0.01);
 

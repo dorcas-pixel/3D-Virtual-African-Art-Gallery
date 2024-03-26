@@ -1,11 +1,9 @@
 import { Link } from "react-router-dom"
-import { SERVERURL } from "../../helpers/URL"
 import { postWithAuth } from "../../helpers/http"
 import "./artItem.css"
 
 export default (props: any) => {
-  const imagePath = SERVERURL +
-    `/assets/uploads/artwork/${props.kind == 'model' ? 'thumbnails' : 'portraits'}/${props.image}`
+  const imagePath = `/assets/uploads/artwork/${props.kind == 'model' ? 'thumbnails' : 'portraits'}/${props.image}`
 
   function addToCart(artworkId: string) {
     postWithAuth('/cart/add', {

@@ -4,7 +4,6 @@ import Session from "../Auth/Session"
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { postWithAuth } from "../helpers/http";
-import { SERVERURL } from "../helpers/URL";
 
 import "./Cart.css"
 
@@ -63,7 +62,7 @@ export default () => {
                 <tr key={item._id}>
                   <td>
                     <span className="flex flex--a-center">
-                      <span className="cart__list__image image--back margin--right-1" style={{backgroundImage: `url("${SERVERURL}/assets/uploads/artwork/portraits/${item.artwork.image}")`}}></span>
+                      <span className="cart__list__image image--back margin--right-1" style={{backgroundImage: `url("/assets/uploads/artwork/portraits/${item.artwork.image}")`}}></span>
                       <span>
                         <b>{item.artwork.name}</b><br />
                         <span onClick={() => removeItem(item._id)}>remove</span>

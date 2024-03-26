@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react"
-import { SERVERURL, getQuery } from "../helpers/URL"
+import { getQuery } from "../helpers/URL"
 import { getElementById, getValueById } from "../helpers/dom"
 import { postWithAuth, postWithAxios } from "../helpers/http"
 import { closeModal, openModal } from "../helpers/modals"
@@ -45,7 +45,7 @@ export default () => {
 
     if (res.successful) {
       (getElementById('portrait-preview') as HTMLElement).style.backgroundImage =
-        `url("${SERVERURL}/assets/uploads/artwork/portraits/${res.portrait}")`;
+        `url("/assets/uploads/artwork/portraits/${res.portrait}")`;
     }
   };
 
@@ -56,7 +56,7 @@ export default () => {
 
     if (res.successful) {
       (getElementById('thumbnail-preview') as HTMLElement).style.backgroundImage =
-        `url("${SERVERURL}/assets/uploads/artwork/thumbnails/${res.thumbnail}")`;
+        `url("/assets/uploads/artwork/thumbnails/${res.thumbnail}")`;
     }
   }; 
 

@@ -5,7 +5,6 @@ import Session from "../Auth/Session"
 
 import "./Marketplace.css"
 import { postWithAuth } from "../helpers/http";
-import { SERVERURL } from "../helpers/URL";
 
 export default () => {
   const [artwork, setArtworks] = useState(null) as any;
@@ -20,7 +19,7 @@ export default () => {
   function getArtworkImage () {
     if (!artwork || artwork && !artwork.image) return '/illustrations/geo-1.jpg';
 
-    return `${SERVERURL}/assets/uploads/artwork/${artwork.kind == 'model' ? 'thumbnails' : 'portraits'}/${artwork.image}`
+    return `/assets/uploads/artwork/${artwork.kind == 'model' ? 'thumbnails' : 'portraits'}/${artwork.image}`
   }
 
   useEffect(() => {
