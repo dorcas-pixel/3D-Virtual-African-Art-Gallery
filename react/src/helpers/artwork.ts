@@ -20,16 +20,16 @@ export async function getArtistWorks(kind: string | null = null) {
   });
 }
 
-export async function getPedestalsByRoom() {
-  return await postWithAuth("/pedestals/get/by/room", {
+export async function getFramesByRoom() {
+  return await postWithAuth("/frames/get/by/room", {
     uniqueId: getQuery("room"),
   });
 }
 
-export function updatePedestalModel(pedestalId: string, modelId: string) {
-  postWithAuth("/pedestals/update/model", {
-    pedestalId,
-    modelId,
+export function setFramePortrait(frameId: string, portraitId: string) {
+  postWithAuth("/frames/update/portrait", {
+    frameId,
+    portraitId,
   });
 }
 

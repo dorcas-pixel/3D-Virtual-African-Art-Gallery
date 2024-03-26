@@ -1,0 +1,21 @@
+
+
+.product-view{
+  padding: 15rem 11% 0;
+}
+
+
+
+.product-view__img{
+  flex: 0 0 35rem;
+  margin-right: 3rem;
+}
+
+.product-view__img img{
+  width: 100%;
+  border-radius: 6px;
+}
+
+.product-view__details{
+  flex: 0 0 60rem;
+}

@@ -68,9 +68,8 @@ export default class ArtModelServices {
   }
 
   static async addModelDetails(
-    wrapRes: IResponse,
     body: IAny,
-    { userInfo }: IAny
+    userInfo: IAny
   ): Promise<IResponse> {
     try {
       const artwork = await ArtWorkServices.getNotReadyOrMakeNew(
@@ -81,20 +80,19 @@ export default class ArtModelServices {
       // if (!artwork.hasImage) throw 'Please upload a thumbnail first';
       if (!artwork.hasModel) throw "Please upload a model file first";
 
-      if (!artwork.model) artwork.model = {};
-
-      artwork.model.type = "gltf";
-      artwork.model.file = body.fileName;
+      // artwork.model.type = "gltf";
+      // artwork.model.file = body.fileName;
       artwork.name = body.name;
-      // artwork.name = body.description;
+      artwork.description = body.description;
+      artwork.price = body.price;
+
       artwork.isReady = true;
 
       artwork.save();
 
-      wrapRes.art = artwork.toJSON();
-      wrapRes.successful = true;
+      this['successful'] = true;
 
-      return wrapRes;
+      return this as unknown as IResponse;
     } catch (e) {
       throw e;
     }

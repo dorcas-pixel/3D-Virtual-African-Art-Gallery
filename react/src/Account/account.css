@@ -1,4 +1,4 @@
-.account{
+.works, .account{
   margin-top: 11rem;
   padding: 0 10%;
 }
@@ -31,25 +31,25 @@
   margin-bottom: 2.2rem;
 }
 
-.account__works{
+.browse__works, .account__works{
   flex: 1;
 }
 
-.account__works__tabs li{
+.browse__works__tabs li, .account__works__tabs li{
   background-color: #999;
   padding: .3rem 1rem;
   color: #eee;
 }
 
-.account__works__tabs li:not(:last-child){
+.browse__works__tabs li:not(:last-child), .account__works__tabs li:not(:last-child){
   margin-right: 1rem;
 }
 
-.account__works__tabs__active{
+.browse__works__tabs__active, .account__works__tabs__active{
   background-color: var(--primary-2) !important;
 }
 
-.account__works__list{
+.browse__works__list, .account__works__list{
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(3, 1fr);
@@ -60,7 +60,7 @@
   flex-direction: column;
   border: 2px dashed #eee;
   border-radius: 6px;
-  height: calc(100% - 5rem);
+  height: 16rem;
 }
 
 .account__works__add svg{

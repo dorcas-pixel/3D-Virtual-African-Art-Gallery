@@ -11,6 +11,7 @@ export default class Artwork extends Model {
       image: { type: String },
       kind: { type: String },
       description: { type: String },
+      price: { type: Number },
       model: {
         type: { type: String },
         file: { type: String },
@@ -64,6 +65,7 @@ export default class Artwork extends Model {
     this.model.findOne({
       condition: { _id, isDeleted: false, isReady: true },
       select,
+      populate: [["user", "-password"]],
     });
 
   getFeatured = () =>

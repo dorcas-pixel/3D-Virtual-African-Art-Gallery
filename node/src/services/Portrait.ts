@@ -31,7 +31,7 @@ export default class PortraitServices {
     userInfo: IAny
   ): Promise<IResponse> {
     try {
-      const { name, description } = body;
+      const { name, description, price } = body;
 
       const artwork = await ArtWorkServices.getNotReadyOrMakeNew(
         userInfo._id,
@@ -41,6 +41,7 @@ export default class PortraitServices {
       if (!artwork.hasImage) throw "Please upload a portrait first";
 
       artwork.name = name;
+      artwork.price = price;
       artwork.description = description;
       artwork.isReady = true;
 

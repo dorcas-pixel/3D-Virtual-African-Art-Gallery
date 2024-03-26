@@ -10,7 +10,10 @@
 
 .container__gallery__overlay__horiz-menu {
   width: fit-content;
-  margin: 7rem auto 0;
+  margin: 0 auto 0;
+  border-radius: 0 0 1rem 1rem;
+  padding: .5rem 1.4rem;
+  background-color: #fff;
   box-shadow: 0 0 10px #818181, 0 0 4px #949494dd;
 }
 
@@ -28,4 +31,6 @@
   min-width: 35rem;
   width: fit-content;
   margin: 1rem auto 0;
+  box-shadow: 0 0 4px #777777,
+    0 0 1px #848484 !important;
 }

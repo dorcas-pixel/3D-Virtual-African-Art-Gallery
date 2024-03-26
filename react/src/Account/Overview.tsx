@@ -11,10 +11,12 @@ import ArtItem from "../Components/ArtItem/ArtItem"
 import Authenticator, { AuthContext } from "../Auth/Authenticator"
 
 import "./account.css"
+import { Link, useParams } from "react-router-dom"
+import Model from "../Components/Modal/Model"
 
-const getArtworks = async (): Promise<any> => {
+const getArtworks = async (kind: string): Promise<any> => {
   const res = await postWithAuth('/works/get/all/by/artist', {
-    kind: getQuery('kind')
+    kind
   })
 
   return res;
@@ -22,15 +24,16 @@ const getArtworks = async (): Promise<any> => {
 
 export default () => {
   const [works, setWorks] = useState([]);
+  const { username } = useParams()
 
   useEffect(() => {
     (async () => {
       await setArtwork();
     })()
-  }, []);
+  }, [getQuery('kind')]);
 
   const setArtwork = async () => {
-    const res = await getArtworks();
+    const res = await getArtworks(getQuery('kind') as string);
 
     setWorks(res.works);
   }
@@ -46,17 +49,49 @@ export default () => {
     }
   };
 
+  const uploadThumbnail = async () => {
+    const data = addInputFile('thumbnail-file', 'thumbnail');
+
+    const res = await postWithAxios(`/model/add/thumbnail`, data)
+
+    if (res.successful) {
+      (getElementById('thumbnail-preview') as HTMLElement).style.backgroundImage =
+        `url("${SERVERURL}/assets/uploads/artwork/thumbnails/${res.thumbnail}")`;
+    }
+  }; 
+
+  const uploadModelFile = async () => {
+    const data = addInputFile('model-file', 'model');
+
+    await postWithAxios(`/model/add/file`, data)
+  }; 
+
   const uploadPortraitDetails = async (e: any) => {
     (e as PointerEvent).preventDefault();
 
     await postWithAuth('/portrait/add/details', {
       name: getValueById('portrait-name'),
+      price: getValueById('portrait-price'),
       description: getValueById('portrait-description'),
     })
 
     await setArtwork()
 
     closeModal('new-portrait');
+  }
+
+  const uploadModelDetails = async (e: any) => {
+    (e as PointerEvent).preventDefault();
+
+    await postWithAuth('/model/add/details', {
+      name: getValueById('model-name'),
+      price: getValueById('model-price'),
+      description: getValueById('model-description'),
+    })
+
+    await setArtwork()
+
+    closeModal('new-model');
   }
 
   return (
@@ -70,18 +105,26 @@ export default () => {
             <p>3D Models &amp; Portraits</p>
           </div>
           <ul className="account__works__tabs flex">
-            <li className="account__works__tabs__active btn">All</li>
-            <li className="btn">Models</li>
-            <li className="btn">Portraits</li>
+            <li className={`${!getQuery('kind') ? 'account__works__tabs__active' : '' } btn`}><Link to={`/u/${username}`}>All</Link></li>
+            <li className={`${getQuery('kind') == 'model' ? 'account__works__tabs__active' : '' } btn`}><Link to={`/u/${username}?kind=model`}>Models</Link></li>
+            <li className={`${getQuery('kind') == 'portrait' ? 'account__works__tabs__active' : '' } btn`}><Link to={`/u/${username}?kind=portrait`}>Portraits</Link></li>
           </ul>
 
           <div className="account__works__list">
-            {works.map((artwork: any) => <ArtItem key={artwork._id} {...artwork}/>)}
-            <div className="account__works__add flex flex--center" onClick={() => openModal('new-portrait')}>
-              <svg className="image--icon">
-                <use href="#add"></use>
-              </svg>
-              <p>Add Portraint</p>
+            {works.map((artwork: any) => <ArtItem inProfile={true} key={artwork._id} {...artwork}/>)}
+            <div className="account__works__add flex flex--center" style={{ flexDirection: "row" }}>
+              <div className="flex flex--a-center" style={{ flex: '1', flexDirection: 'column' }} onClick={() => openModal('new-portrait')}>
+                <svg className="image--icon">
+                  <use href="#add"></use>
+                </svg>
+                <p>Add Portraint</p>
+              </div>
+              <div className="flex flex--a-center" style={{ flex: '1', flexDirection: 'column' }} onClick={() => openModal('new-model')}>
+                <svg className="image--icon">
+                  <use href="#add"></use>
+                </svg>
+                <p>Add Model</p>
+              </div>
             </div>
           </div>
         </div>
@@ -90,6 +133,12 @@ export default () => {
         uploadPortrait={uploadPortrait}
         uploadPortraitDetails={uploadPortraitDetails}
         />
+
+      <Model
+        uploadThumbnail={uploadThumbnail}
+        uploadModelFile={uploadModelFile}
+        uploadModelDetails={uploadModelDetails}
+      />
     </Authenticator>
   )
 }

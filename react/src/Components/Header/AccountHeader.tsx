@@ -10,7 +10,7 @@ export default () => {
       <img src="/logo/png/logo-no-background.png" alt="logo" className="header__logo" />
       <div className="header__user flex flex--a-center">
         <p className="margin--right-2">
-          <p><b>{user.fullname}</b></p>
+          <span><b>{user.fullname}</b></span><br/>
           <span>@{user.username}</span>
         </p>
         <div className="header__user__profile image--back image--round" style={{backgroundImage: 'url("/profiles/2023/10/23/blank.jpg")'}}></div>

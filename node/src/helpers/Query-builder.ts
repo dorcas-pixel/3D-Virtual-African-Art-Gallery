@@ -105,4 +105,6 @@ export default class QueryBuilder {
         else
             reject('Something went wrong, try again later')
     });
+
+    deleteOne = (condition) => this._model.deleteOne(condition);
 };

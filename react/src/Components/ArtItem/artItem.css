@@ -13,3 +13,7 @@
   height: 3rem;
   margin-right: 1rem;
 }
+
+.art-items__details__desc{
+  flex: 1;
+}

@@ -1,11 +1,13 @@
-import { getElementById, getElementsByClass } from "./dom"
+import { getElementById, get1ByClass } from "./dom"
 
 export const showError = (id: string, err: string) => {
   const parent = getElementById(`${id}-error`);
 
   if (!parent) return;
 
-  getElementsByClass('error-msg', parent)[0].innerHTML = err
+  let con = get1ByClass('error-msg', parent)
+
+  if (con) con.innerHTML = err
   
   parent.classList.remove('hide')
 }

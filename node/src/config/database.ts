@@ -10,8 +10,6 @@ export default async () => {
         : process.env.CLOUD_DATABASE_URL
     )
   );
-
-  await RoomServices.createDefaultRoom();
 };
 
 export const MONGO_ID_LEN = 24;

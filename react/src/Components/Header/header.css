@@ -4,10 +4,15 @@
   top: 0;
   left: 0;
   padding: 1rem 11%;
+  z-index: 5;
 }
 
 .header__logo {
   width: 8rem;
+}
+
+.header__nav__ul li:not(last-child){
+  margin-right: 1rem;
 }
 
 .header__user__profile{

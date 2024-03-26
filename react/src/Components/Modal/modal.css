@@ -26,9 +26,7 @@
 
 .model__main__body__preview{
   flex: 0 0 30rem;
-  background-color: #f5f5f5;
   height: 15rem;
-  border-radius: 5px;
 }
 
 .model__main__body__form{

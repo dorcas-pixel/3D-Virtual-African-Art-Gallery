@@ -18,5 +18,22 @@ export default async (app: Application) => {
 
     await connectDB()
 
+    app.use(express.static(path.join(__dirname, '../../../react/dist')));
+
+    [
+        '/',
+        '/sign-in',
+        '/sign-up',
+        '/gallery',
+        '/marketplace',
+        '/marketplace/:artworkId',
+        '/cart',
+        '/u/:username'
+    ].forEach((url: string) => {
+        app.get(url, function (_, res) {
+            res.sendFile(path.join(__dirname, '../../../react/dist', 'index.html'));
+        });
+    })
+
     routes(app);
 };

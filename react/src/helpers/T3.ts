@@ -1,39 +1,45 @@
 import * as T3 from "three";
+import Stats from "three/examples/jsm/libs/stats.module.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
-
 import { SERVERURL } from "./URL";
-import {
-  getPedestalsByRoom,
-  updateArtworkScale,
-  updatePedestalModel,
-} from "./artwork";
+import { getFramesByRoom } from "./artwork";
+
+interface IVec {
+  x: number,
+  y: number,
+  z: number
+}
 
 export default class T3Helper {
   public scene = new T3.Scene();
   public renderer = new T3.WebGLRenderer({ antialias: false });
   public camera: T3.PerspectiveCamera;
   public controls: PointerLockControls;
-  // public artStations: Array<any> = [];
-  public nextModelPosition: T3.Vector3 | null = null;
-  public targetModel: T3.Object3D | null = null;
-
-  private pedestals: any = null;
-  private closestPedestal: any = null;
+  public stats = new Stats()
 
   public loader = new GLTFLoader();
   private keys: any = {};
+
+  private stands: Array<any> = [];
+  private frames: Array<any> = [];
+  private loadedFrames: Array<any> = []
+  private loadedStands: Array<any> = []
+  private frameMeshes = new Map();
+  private standMeshes = new Map();
+  private lastClosestFrame: any;
+  private lastClosestStand: any;
+
+  // private _standsMesh: T3.InstancedMesh;
 
   constructor(width: number, height: number) {
     this.camera = new T3.PerspectiveCamera(40, width / height, 0.1, 1800);
 
     this.renderer.setSize(width, height);
 
-    this.renderer.setPixelRatio(window.devicePixelRatio * 0.5);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
 
     this.scene.background = new T3.Color(0xdddddd);
-
-    this.scene.add(new T3.GridHelper(9, 9));
 
     this.controls = new PointerLockControls(
       this.camera,
@@ -47,7 +53,7 @@ export default class T3Helper {
 
     const dlight = new T3.DirectionalLight(0xfff9d8, 0.3);
     dlight.position.set(0, 1, 0);
-    dlight.castShadow = true;
+    // dlight.castShadow = true;
     this.scene.add(dlight);
   }
 
@@ -57,7 +63,13 @@ export default class T3Helper {
     this.controls.addEventListener("lock", () => (menu.style.display = "none"));
     this.controls.addEventListener(
       "unlock",
-      () => (menu.style.display = "block")
+      () => {
+        let tid = setTimeout(() => {
+          menu.style.display = "block";
+
+          clearTimeout(tid);
+        }, 1000)
+      }
     );
   }
 
@@ -88,22 +100,42 @@ export default class T3Helper {
     return arr && Array.isArray(arr) && arr.length > 0;
   }
 
-  render() {
-    this.renderer.render(this.scene, this.camera);
-  }
-
-  animate() {
-    requestAnimationFrame(this.animate.bind(this));
-
-    this.updateMovement();
-
-    this.render();
-  }
-
   setCameraPosition() {
-    this.camera.position.set(0.2, 1.4, 0);
-    // this.camera.rotation. = this.degToRad(180);
-    // this.camera.lookAt(new T3.Vector3(-5, 0, 0))
+    this.camera.position.set(0.2, 1.4, 8);
+  }
+
+  isZOffset (rotation: number) {
+    return !rotation
+  }
+
+  isXOffset(rotation: number) {
+    return rotation
+  }
+
+  getXOffset(angle: number, offset: number = 0.01) {
+    let sign = angle < 0 ? -1 : 1;
+
+    return offset * sign;
+  }
+
+  setMatrix(position: T3.Vector3, scale: T3.Vector3, matrix: T3.Matrix4) {
+    const quaternion = new T3.Quaternion();
+
+    matrix.compose(position, quaternion, scale);
+  }
+
+  setObjectPosition (obj: T3.Object3D, pos: IVec) {
+    obj.position.set(
+      pos.x,
+      pos.y,
+      pos.z
+    );
+  }
+
+  setRotation(obj: T3.Object3D, angle: number, rotation: string = 'rotateY') {
+    if (rotation == 'rotateY') return obj.rotateY(this.degToRad(angle))
+
+    obj.rotateZ(this.degToRad(angle))
   }
 
   loadImage(image: string, pos: any, rotation?: any) {
@@ -117,7 +149,7 @@ export default class T3Helper {
 
     // create a plane geometry for the image with a width of 10
     // and a height that preserves the image's aspect ratio
-    var geometry = new T3.PlaneGeometry(0.41, 0.44 * 0.75);
+    var geometry = new T3.PlaneGeometry(0.533, 0.572 * 0.75);
 
     // combine our image geometry and material into a mesh
     var mesh = new T3.Mesh(geometry, material);
@@ -126,209 +158,340 @@ export default class T3Helper {
     if (pos) mesh.position.set(pos.x, pos.y + 0.45, pos.z + 0.01);
 
     if (rotation) {
-      rotation.forEach((rotation: Array<string | number>) => {
-        let method = rotation[0] as string;
+      this.setRotation(mesh, rotation, 'rotateY')
 
-        let deg = this.degToRad(rotation[1] as number);
-
-        // if (method == "rotateX") mesh.rotateX(deg);
-        // else if (method == "rotateY") mesh.rotateY(deg);
-        mesh.rotateY(45);
-      });
+      if (rotation > 0) mesh.position.setX(pos.x + 0.01)
+      else mesh.position.setX(pos.x - 0.01)
     }
 
     // add the image to the scene
     this.scene.add(mesh);
   }
 
-  loadModel(work: any) {
-    if (!this.nextModelPosition) return;
+  loadModel (artwork: any) {
+    if (!this.lastClosestStand) return;
 
     this.loader.load(
-      `${SERVERURL}/assets/uploads/artwork/models/${work.model.folder}/scene.gltf`,
+      `${SERVERURL}/assets/uploads/artwork/models/${artwork.model.folder}/scene.gltf`,
       (gltf) => {
         gltf.scene.children[0].scale.set(0.01, 0.01, 0.01);
 
-        const x = this.nextModelPosition?.x || 0,
+        const x = this.lastClosestStand?.x || 0,
           y = 0.55,
-          z = this.nextModelPosition?.z || 0;
+          z = this.lastClosestStand?.z || 0;
 
         gltf.scene.children[0].position.set(x, y, z);
 
-        this.targetModel = gltf.scene.children[0];
-
-        updatePedestalModel(this.closestPedestal._id, work._id);
-        updateArtworkScale(work._id, 0.01);
-
-        this.pedestals.forEach((pedestal: any) => {
-          if (pedestal._id == this.closestPedestal._id) {
-            pedestal.hasModel = true;
-
-            return;
-          }
-        });
-
-        this.scene.add(gltf.scene);
+        // this.scene.add(gltf.scene.children[0]);
       }
     );
   }
 
-  adjustScale(scale: number) {
-    if (!this.targetModel) return;
+  displayPainting(portrait: any) {
+    // setFramePortrait(this.lastClosestFrame.userData.frameId, portrait._id)
 
-    this.targetModel?.scale.set(scale, scale, scale);
-
-    const artworkId = this.targetModel.userData["id"];
-
-    if (!artworkId) return;
-
-    updateArtworkScale(artworkId, scale);
+    this.loadImage(portrait.image, this.lastClosestFrame.position, this.lastClosestFrame.userData.rotation);
   }
 
-  loadPedestals() {
+  displayModel(artwork: any) {
+    // setFramePortrait(this.lastClosestFrame.userData.frameId, portrait._id)
+
+    this.loadModel(artwork)
+  }
+
+  displayPaintings() {
     (async () => {
-      this.pedestals = (await getPedestalsByRoom()).pedestals;
+      this.frames = (await getFramesByRoom()).frames;
 
-      this.pedestals.forEach((pedestal: any) => {
-        const pos = pedestal.position;
+      this.frames.forEach((frame: any) => {
+        this.loader.load(`/3D/picture_frame_slim/scene.gltf`, (gltf) => {
+          this.setObjectPosition(gltf.scene.children[0], frame.position)
 
-        this.loader.load(
-          `${SERVERURL}/assets/3D/pedestal/scene.gltf`,
-          (gltf) => {
-            gltf.scene.children[0].position.set(pos.x, pos.y, pos.z);
-            gltf.scene.children[0].scale.set(0.05, 0.05, 0.05);
+          const rotation = frame.rotation;
+          const position = frame.position;
 
-            this.scene.add(gltf.scene);
+          const textMesh = this.makeText('0909')
 
-            if (pedestal.hasModel) {
-              this.loader.load(
-                `${SERVERURL}/assets/uploads/artwork/models/${pedestal.model.model.folder}/scene.gltf`,
-                (gltf) => {
-                  const scale = pedestal.model.model.scale;
+          if (textMesh)
+            this.setObjectPosition(textMesh, {
+              x: position.x + (this.isXOffset(rotation) ? this.getXOffset(rotation) : 0),
+              y: .7,
+              z: position.z + (this.isZOffset(rotation) ? 0.01 : 0)
+            })
 
-                  gltf.scene.children[0].scale.set(scale, scale, scale);
+          if (rotation) {
+            this.setRotation(gltf.scene.children[0], rotation, 'rotateZ')
 
-                  const x = pos.x || 0,
-                    y = 0.57,
-                    z = pos.z || 0;
-
-                  gltf.scene.children[0].position.set(x, y, z);
-
-                  this.scene.add(gltf.scene);
-                }
-              );
-            }
+            if (textMesh) this.setRotation(textMesh, rotation)
           }
-        );
-      });
-    })();
 
-    this.render();
+          gltf.scene.children[0].scale.set(1.6, 0.7, 1);
+
+          gltf.scene.children[0].userData.frameId = frame._id
+          gltf.scene.children[0].userData.rotation = rotation
+          gltf.scene.children[0].userData.hasPortrait = frame.hasPortrait;
+
+          this.loadedFrames.push(gltf.scene.children[0])
+
+          if (textMesh) this.scene.add(textMesh)
+
+          this.scene.add(gltf.scene);
+
+          if (frame.hasPortrait)
+            this.loadImage(frame.portrait.image, position, rotation);
+        });
+      });
+
+      // Make this work
+
+      // this.loader.load(`/3D/frame_2/scene.gltf`, (gltf) => {
+      //   let positions = this.frames.map((frame) => new T3.Vector3(frame.position.x, frame.position.y, frame.position.z));
+
+      //   this.instanceRenderer(this.traverseGroup(gltf.scene.children[0]), positions, new T3.Vector3(.1, .1, .1))
+      // })
+    })()
   }
 
-  showcaseModel() {
-    let shortestDist;
+  displayStands () {
+    (async () => {
+      this.stands = [
+        {
+          position: {
+            x: -3.4,
+            y: 0,
+            z: 4
+          }
+        },
+        {
+          position: {
+            x: -3.4,
+            y: 0,
+            z: 0
+          }
+        },
+        {
+          position: {
+            x: -3.4,
+            y: 0,
+            z: -4
+          }
+        },
+        {
+          position: {
+            x: 3.4,
+            y: 0,
+            z: 4
+          }
+        },
+        {
+          position: {
+            x: 3.4,
+            y: 0,
+            z: 0
+          }
+        },
+        {
+          position: {
+            x: 3.4,
+            y: 0,
+            z: -4
+          }
+        },
+      ];
 
-    for (let i = 0; i < this.pedestals.length; i++) {
-      let pedestal = this.pedestals[i];
+      this.stands.forEach((stand: any) => {
+        this.loader.load(`/3D/pedestal/scene.gltf`, (gltf) => {
+          this.setObjectPosition(gltf.scene.children[0], stand.position)
+          gltf.scene.children[0].scale.set(.05, .05, .05);
 
-      const position = pedestal.position;
+          gltf.scene.children[0].userData.standId = Math.random()
+
+          this.loadedStands.push(gltf.scene.children[0])
+
+          this.scene.add(gltf.scene);
+        });
+      });
+
+      // this.loader.load(`/3D/pedestal/scene.gltf`, (gltf) => {
+      //   let positions = this.stands.map((stand) => new T3.Vector3(stand.position.x, stand.position.y, stand.position.z));
+
+      //   this.instanceRenderer(this.traverseGroup(gltf.scene.children[0]), positions, new T3.Vector3(.5, .5, .5))
+      // });
+    })()
+  }
+
+  makeText(txt: string) {
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+
+    if (!ctx) return null;
+
+    ctx.fillStyle = 'green'
+    ctx.font = '30px sans-serif'
+    ctx.fillText(txt, 0, 30)
+
+    const texture = new T3.Texture(canvas)
+    texture.needsUpdate = true
+
+    var material = new T3.MeshBasicMaterial({
+      map: texture,
+      side: T3.DoubleSide,
+    })
+
+    return new T3.Mesh(new T3.PlaneGeometry(0.41, 0.44 * 0.75), material)
+  }
+
+  instanceRenderer(meshes: Array<any>, positions: Array<any>, scale: T3.Vector3) {
+    meshes.forEach(mesh => {
+      const matrix = new T3.Matrix4();
+
+      console.log(mesh);
+      
+
+      const instancedMesh = new T3.InstancedMesh(mesh.geometry, mesh.material, positions.length);
+
+      for (let i = 0; i < positions.length; i++) {
+        this.setMatrix(positions[i], scale, matrix);
+
+        instancedMesh.setMatrixAt(i, matrix);
+      }
+
+      this.scene.add(instancedMesh)
+    });
+  }
+
+  traverseGroup (obj: any) {
+    if (obj.isMesh) return [obj]
+
+    let meshes: Array<T3.Mesh> = [];
+
+    obj.children.forEach((child: any) => {
+      meshes = [...meshes, ...this.traverseGroup(child)];
+    });
+
+    return meshes;
+  }
+
+  findClosestFrames () {
+    let closestPosition: number,
+      closestFrame: any
+
+    this.loadedFrames.forEach(object => {
+      if (object.userData.hasPortrait) return;
+
+      const position = object.position;
 
       const distance = this.camera.position.distanceTo(
         new T3.Vector3(position.x, position.y, position.z)
       );
 
-      if (
-        (!shortestDist || (shortestDist && shortestDist > distance)) &&
-        !pedestal.hasModel
-      ) {
-        shortestDist = distance;
+      if (!closestPosition || closestPosition && closestPosition > distance) {
+        closestFrame = object;
+        closestPosition = distance;
+      }
+    });
 
-        this.closestPedestal = pedestal;
+    if (!(this.lastClosestFrame && closestFrame && this.lastClosestFrame.userData.frameId == closestFrame.userData.frameId)) {
+      if (!closestFrame) return;
+      
+      let meshes = this.frameMeshes.get(closestFrame.userData.frameId);
+
+      if (!meshes) {
+        meshes = this.traverseGroup(closestFrame);
+
+        this.frameMeshes.set(closestFrame.userData.frameId, meshes)
+      }
+
+      meshes.forEach((mesh: any) => {
+        mesh.material.emissive = new T3.Color('darkgray')
+      });
+
+      // unset the gray color from previous frame
+      if (this.lastClosestFrame){
+        let lastframeMeshes = this.frameMeshes.get(this.lastClosestFrame.userData.frameId);
+
+        if (!lastframeMeshes) {
+          lastframeMeshes = this.traverseGroup(this.lastClosestFrame);
+
+          this.frameMeshes.set(this.lastClosestFrame.userData.frameId, lastframeMeshes)
+        }
+
+        lastframeMeshes.forEach((mesh: any) => {
+          mesh.material.emissive = new T3.Color(0x000000)
+        });
       }
     }
 
-    if (!shortestDist)
-      // create in a different room
-      throw "Functionality missing.";
-
-    let pos = this.closestPedestal.position;
-    this.nextModelPosition = pos;
-
-    this.camera.position.set(pos.x, 1, pos.z + (pos.z < 0 ? +2 : -2));
-    // this.camera.lookAt(new T3.Vector3(pos.x, pos.y, pos.z));
+    this.lastClosestFrame = closestFrame.clone();
   }
 
-  // demo displays
-  displayPaintings() {
-    const frames: Array<any> = [
-      {
-        folder: "picture_frame_slim",
-        picture: "woman-1.jpg",
-        pos: {
-          x: 2,
-          y: 1,
-          z: -8,
-        },
-      },
+  findClosestStands() {
+    let closestPosition: number,
+      closestStand: any
 
-      {
-        folder: "picture_frame_slim",
-        picture: "woman-2.jpg",
-        pos: {
-          x: 0,
-          y: 1,
-          z: -8,
-        },
-      },
+    this.loadedStands.forEach(obj => {
+      if (obj.userData.hasPortrait) return;
 
-      {
-        folder: "picture_frame_slim",
-        picture: "woman-3.jpg",
-        pos: {
-          x: -2,
-          y: 1,
-          z: -8,
-        },
-      },
+      const position = obj.position;
 
-      {
-        folder: "picture_frame_slim",
-        picture: "woman-3.jpg",
-        rotation: [["rotateZ", 90]],
-        pos: {
-          x: -2,
-          y: 1,
-          z: -6,
-        },
-      },
-    ];
+      const distance = this.camera.position.distanceTo(
+        new T3.Vector3(position.x, position.y, position.z)
+      );
 
-    frames.forEach((frame: any) => {
-      this.loader.load(`/3D/${frame.folder}/scene.gltf`, (gltf) => {
-        gltf.scene.children[0].position.set(
-          frame.pos.x,
-          frame.pos.y,
-          frame.pos.z
-        );
+      if (!closestPosition || closestPosition && closestPosition > distance) {
+        closestStand = obj;
+        closestPosition = distance;
+      }
+    });
 
-        if (frame.rotation) {
-          frame.rotation.forEach((rotation: Array<string | number>) => {
-            let method = rotation[0] as string;
-            let deg = this.degToRad(rotation[1] as number);
+    if (!(this.lastClosestStand && this.lastClosestStand.userData.standId == closestStand.userData.standId)) {
+      if (!closestStand) return;
 
-            if (method == "rotateX") gltf.scene.children[0].rotateX(deg);
-            else if (method == "rotateY") gltf.scene.children[0].rotateY(deg);
-            else if (method == "rotateZ") gltf.scene.children[0].rotateZ(deg);
-          });
+      let meshes = this.standMeshes.get(closestStand.userData.standId);
+
+      if (!meshes) {
+        meshes = this.traverseGroup(closestStand);
+
+        this.standMeshes.set(closestStand.userData.standId, meshes)
+      }
+
+      meshes.forEach((mesh: any) => {
+        mesh.material.emissive = new T3.Color('darkgray')
+      });
+
+      // unset the gray color from previous frame
+      if (this.lastClosestStand) {
+        let lastStandMeshes = this.frameMeshes.get(this.lastClosestStand.userData.standId);
+
+        if (!lastStandMeshes) {
+          lastStandMeshes = this.traverseGroup(this.lastClosestStand);
+
+          this.frameMeshes.set(this.lastClosestStand.userData.standId, lastStandMeshes)
         }
 
-        gltf.scene.children[0].scale.set(1.6, 0.7, 1);
+        lastStandMeshes.forEach((mesh: any) => {
+          mesh.material.emissive = new T3.Color(0x000000)
+        });
+      }
+    }
 
-        this.scene.add(gltf.scene);
+    this.lastClosestStand = closestStand.clone();
+  }
 
-        this.loadImage(frame.picture, frame.pos, frame.rotation);
-      });
-    });
+  render() {
+    this.findClosestFrames()
+    this.findClosestStands()
+
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  animate() {
+    requestAnimationFrame(this.animate.bind(this));
+
+    this.updateMovement();
+
+    this.render();
+
+    this.stats.update()
   }
 }

@@ -1,5 +1,7 @@
-export const get1ByClass = (className: string) => {
-  const els = document.getElementsByClassName(className);
+export const get1ByClass = (className: string, parent?: HTMLElement) => {
+  const els = 
+    parent ? parent.getElementsByClassName(className) :
+      document.getElementsByClassName(className)
 
   return els ? els[0] : null;
 };
