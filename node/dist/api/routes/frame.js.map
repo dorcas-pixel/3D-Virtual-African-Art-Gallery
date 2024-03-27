@@ -1,0 +1,1 @@
+{"version":3,"file":"frame.js","sourceRoot":"","sources":["../../../src/api/routes/frame.ts"],"names":[],"mappings":";;;;;AAEA,+DAAiD;AACjD,iEAAiD;AAEjD,kBAAe,CAAC,GAAgB,EAAE,EAAE;IAClC,GAAG,CAAC,IAAI,CACN,qBAAqB,EACrB,cAAc,CAAC,IAAI,CAAC,eAAa,CAAC,eAAe,CAAC,CACnD,CAAC;IAEF,GAAG,CAAC,IAAI,CACN,yBAAyB,EACzB,cAAc,CAAC,IAAI,CAAC,eAAa,CAAC,gBAAgB,CAAC,CACpD,CAAC;AACJ,CAAC,CAAC"}
