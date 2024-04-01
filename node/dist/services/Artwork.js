@@ -9,7 +9,7 @@ class ArtWorkServices {
     static async getNotReadyOrMakeNew(user, kind) {
         let artwork = await Artwork_1.default.getNotReadyByUser(user, kind);
         if (!artwork) {
-            let room = await Room_1.default.getRoom();
+            let room = await Room_1.default.getRoom(kind);
             room.count += 1;
             room.save();
             artwork = await Artwork_1.default.add({

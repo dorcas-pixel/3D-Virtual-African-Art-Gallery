@@ -39,42 +39,6 @@ exports.default = (app) => {
         this.successful = req["success"];
         return this;
     }));
-    // app.post(
-    //   "/model/add/thumbnail",
-    //   (req, res, next) => {
-    //     anyFiles("./public/assets/uploads/artwork/thumbnails", "image")(
-    //       req,
-    //       res,
-    //       async (err) => {
-    //         await modelService.addModelThumbnail(req.body, req);
-    //         next();
-    //       }
-    //     );
-    //   },
-    //   baseController.wrap_with_request((res_wrap, _, req) => {
-    //     res_wrap.successful = req["success"];
-    //     res_wrap.thumbnail = req["thumbnail"];
-    //     return res_wrap;
-    //   })
-    // );
-    // app.post(
-    //   "/model/add/model-file",
-    //   (req, res, next) => {
-    //     anyFiles("./public/assets/uploads/artwork/models", "zip")(
-    //       req,
-    //       res,
-    //       async (err) => {
-    //         await modelService.addModelFile(req.body, req);
-    //         next();
-    //       }
-    //     );
-    //   },
-    //   baseController.wrap_with_request((res_wrap, _, req) => {
-    //     res_wrap.successful = req["success"];
-    //     res_wrap.art = req["art"];
-    //     return res_wrap;
-    //   })
-    // );
     app.post("/model/add/details", base_1.default.wrapWithUser(Model_1.default.addModelDetails));
     app.post("/works/get/all/by/artist", base_1.default.wrapWithUser(Artwork_1.default.getAllByUser));
     app.post("/works/get/all", base_1.default.wrap(Artwork_1.default.getAll));

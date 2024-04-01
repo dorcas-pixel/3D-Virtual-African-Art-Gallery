@@ -83,6 +83,7 @@ class QueryBuilder {
             reject('Something went wrong, try again later');
     });
     deleteOne = (condition) => this._model.deleteOne(condition);
+    deleteMany = (condition) => this._model.deleteMany(condition);
 }
 exports.default = QueryBuilder;
 ;

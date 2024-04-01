@@ -12,6 +12,7 @@ class User extends Model_1.default {
             username: { type: String },
             email: { type: String, required: true },
             picture: { type: String, default: "blank.jpg" },
+            credit: { type: Number, default: 0 },
             password: { type: String },
         });
         super(mongoose, "User", QueryBuilder, schema);
@@ -19,6 +20,11 @@ class User extends Model_1.default {
     getByUsernameOrEmail(identifier) {
         return this.model.findOneWithOr({
             condition: [{ email: identifier }, { username: identifier }],
+        });
+    }
+    getById(id) {
+        return this.model.findOne({
+            condition: { _id: id }
         });
     }
 }

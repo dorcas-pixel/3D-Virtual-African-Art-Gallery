@@ -24,6 +24,11 @@ class Cart extends Model_1.default {
             _id
         });
     }
+    removeAll(_id) {
+        return this.model.deleteMany({
+            _id
+        });
+    }
 }
 exports.default = Cart;
 //# sourceMappingURL=Cart.js.map

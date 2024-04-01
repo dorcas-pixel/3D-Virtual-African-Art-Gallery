@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Room_1 = __importDefault(require("../models/Room"));
 const String_1 = require("../helpers/String");
 const Frame_1 = __importDefault(require("./Frame"));
+const Stand_1 = __importDefault(require("./Stand"));
 class RoomServices {
     static async createRoom() {
         try {
@@ -15,22 +16,24 @@ class RoomServices {
                 uniqueId,
             });
             Frame_1.default.addFrameToRoom(room._id);
+            Stand_1.default.addStandsToRoom(room._id);
             return room;
         }
         catch (e) {
             throw e;
         }
     }
-    static async getRoom() {
+    static async getRoom(kind) {
         let room = await Room_1.default.getLatestRoom();
-        if (!room || (room && room.count >= 11))
+        if (!room || (room && kind && kind == 'model' && room.modelCount >= 6) ||
+            (room && kind && kind == 'portrait' && room.portraitCount >= 11))
             room = RoomServices.createRoom();
         return room;
     }
     static async getRoomIdOrDefault(roomUniqueId) {
         if (!roomUniqueId) {
             let room = await RoomServices.getRoom();
-            roomUniqueId = room.uniqueId;
+            return room._id;
         }
         return (await Room_1.default.getByUniqueId(roomUniqueId))._id;
     }

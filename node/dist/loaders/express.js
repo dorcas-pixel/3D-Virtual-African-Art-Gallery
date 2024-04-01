@@ -16,21 +16,25 @@ exports.default = async (app) => {
     app.use(express_ejs_layouts_1.default);
     // app.use(cors());
     await (0, database_1.default)();
-    app.use(express_1.default.static(path_1.default.join(__dirname, '../../../react/dist')));
-    [
-        '/',
-        '/sign-in',
-        '/sign-up',
-        '/gallery',
-        '/marketplace',
-        '/marketplace/:artworkId',
-        '/cart',
-        '/u/:username'
-    ].forEach((url) => {
-        app.get(url, function (_, res) {
+    if (process.env.NODE_ENV == "production") {
+        app.use(express_1.default.static(path_1.default.join(__dirname, '../../../react/dist')));
+        const routes = [
+            "/",
+            "/sign-in",
+            "/sign-up",
+            "/gallery",
+            "/marketplace",
+            "/marketplace/:artworkId",
+            "/checkout",
+            "/checkout/success",
+            "/u/:username",
+            "/u/:username/cart",
+            "/u/:username/orders"
+        ];
+        app.get(routes, function (_, res) {
             res.sendFile(path_1.default.join(__dirname, '../../../react/dist', 'index.html'));
         });
-    });
+    }
     (0, routes_1.default)(app);
 };
 //# sourceMappingURL=express.js.map
