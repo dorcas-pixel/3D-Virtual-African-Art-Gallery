@@ -26,6 +26,19 @@ export async function getFramesByRoom() {
   });
 }
 
+export async function getStandsByRoom() {
+  return await postWithAuth("/stands/get/by/room", {
+    uniqueId: getQuery("room"),
+  });
+}
+
+export function setStandModel(standId: string, modelId: string) {
+  postWithAuth("/stands/update/model", {
+    standId,
+    modelId,
+  });
+}
+
 export function setFramePortrait(frameId: string, portraitId: string) {
   postWithAuth("/frames/update/portrait", {
     frameId,

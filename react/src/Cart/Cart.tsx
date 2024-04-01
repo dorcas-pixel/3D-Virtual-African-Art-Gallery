@@ -4,6 +4,7 @@ import Session from "../Auth/Session"
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { postWithAuth } from "../helpers/http";
+import { BASEURL } from "../helpers/URL";
 
 import "./Cart.css"
 
@@ -62,7 +63,7 @@ export default () => {
                 <tr key={item._id}>
                   <td>
                     <span className="flex flex--a-center">
-                      <span className="cart__list__image image--back margin--right-1" style={{backgroundImage: `url("/assets/uploads/artwork/portraits/${item.artwork.image}")`}}></span>
+                      <span className="cart__list__image image--back margin--right-1" style={{backgroundImage: `url("${BASEURL()}/assets/uploads/artwork/portraits/${item.artwork.image}")`}}></span>
                       <span>
                         <b>{item.artwork.name}</b><br />
                         <span onClick={() => removeItem(item._id)}>remove</span>
@@ -76,35 +77,8 @@ export default () => {
             </tbody>
           </table>
         </div>
-        {/* <div className="cart__list">
-          <div className="cart__list__item flex flex--a-center flex--j-space-between">
-            <div>
-              <p><b>Item</b></p>
-            </div>
-            <div>
-              <p><b>Quantity</b></p>
-            </div>
-            <div>
-              <p><b>Price</b></p>
-            </div>
-          </div>
-          {works?.map((item: any) => (
-            <div className="cart__list__item flex flex--a-center flex--j-space-between">
-              <div>
-                <p><b></b></p>
-                <p>remove</p>
-              </div>
-              <div>
-                1
-              </div>
-              <div>
-                R400
-              </div>
-            </div>
-          ))}
-        </div> */}
         <div className="cart__buttons margin--top-2">
-          <button className="btn btn--primary margin--right-2">Check out</button>
+          <Link to="/checkout" className="btn btn--primary margin--right-2">Check out</Link>
           <button className="btn">Clear</button>
         </div>
       </div>

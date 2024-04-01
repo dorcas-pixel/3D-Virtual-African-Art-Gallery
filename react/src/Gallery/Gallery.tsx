@@ -1,31 +1,37 @@
 import { useEffect, useRef, useState } from "react"
-import { getElementById } from "../helpers/dom"
+import { getElementById, getValueById } from "../helpers/dom"
 
 import T3Helper from "../helpers/T3"
 
 import "./Gallery.css"
 import { getArtistWorks } from "../helpers/artwork";
 
-
-export default () => {
-  const refCon = useRef(null);
-
-  const threeHelper = new T3Helper(window.innerWidth, window.innerHeight);
+const threeHelper = new T3Helper(window.innerWidth, window.innerHeight);
+if (threeHelper.renderer.getContext()){
   threeHelper.setCameraPosition()
 
   threeHelper.loader.load(`/3D/vr_gallery/scene.gltf`, (gltf: any) => {
     gltf.scene.children[0].rotation.z = threeHelper.degToRad(-90)
 
-    threeHelper.scene.add(gltf.scene)
+    threeHelper.scene.add(gltf.scene.children[0])
 
     threeHelper.animate()
   })
 
   threeHelper.displayStands();
   threeHelper.displayPaintings();
+}
 
-  const [portraits, setPortraits] = useState(null) as any;
-  const [models, setModels] = useState(null) as any;
+export default () => {
+  const refCon = useRef(null);
+
+  const [portraits, setPortraits] = useState([]) as any;
+  const [models, setModels] = useState([]) as any;
+  const [position, setPosition] = useState({
+    z: 0,
+    y: 0,
+    x: 0
+  }) as any;
 
   useEffect(() => {
     refCon.current &&
@@ -34,6 +40,10 @@ export default () => {
     refCon.current &&
       (refCon.current as HTMLElement).appendChild(threeHelper.stats.dom)
   }, [])
+
+  useEffect(() => {
+    threeHelper.adjustPosition(position)
+  }, [position])
 
   const startTour = () => {
     const menu = getElementById('tour-menu') as HTMLElement;
@@ -54,8 +64,10 @@ export default () => {
     threeHelper.displayPainting(portrait)
   }
 
-  const displayModel = (model: any) => {
-    threeHelper.displayModel(model)
+  const displayModel = async (model: any) => {
+    setPosition(await threeHelper.displayModel(model))
+    
+    getElementById('model-scale')?.classList.remove('hide');
   }
 
   const showModels = async () => {
@@ -64,15 +76,9 @@ export default () => {
     setModels((await getArtistWorks('model')).works)
   }
 
-  // const loadModel = (work: any) => {
-  //   threeHelper.loadModel(work);
-
-  //   getElementById('model-scale')?.classList.remove('hide');
-  // }
-
-  // const adjustScale = () => {
-  //   threeHelper.adjustScale(parseFloat(getElementValueById('scale-input') as string));
-  // }
+  const adjustScale = () => {
+    threeHelper.adjustScale(parseFloat(getValueById('scale-input') as string));
+  }
 
 	return (
 		<main className="container__gallery">
@@ -100,11 +106,27 @@ export default () => {
               <li onClick={() => displayModel(model)} key={model._id}>{model.name}</li>
             ))}
           </ul>
+          <p className="margin--top-1" style={{ textAlign: 'center' }} onClick={() => getElementById('model-scale')?.classList.remove('hide')}>Resume controls</p>
         </div>
 
         <div className="container__gallery__overlay__scale card card__body margin--top-2 hide" id="model-scale">
           <p>Adjust scale view model</p>
-          <input type="range" className="margin--top-2" style={{ width: '100%' }} id="scale-input" step="0.001" min="0" max="1"  />
+          <input type="range" className="margin--top-2" onChange={adjustScale} style={{ width: '100%' }} id="scale-input" step="0.0001" min="0" max="1"  />
+          <p>Position</p>
+          <div className="flex position">
+            <div className="input flex">
+              <label htmlFor="">X</label>
+              <input type="number" onChange={(e) => setPosition({ ...position, x: e.target.value })} value={position?.x} step="0.01" />
+            </div>
+            <div className="input flex">
+              <label htmlFor="">Y</label>
+              <input type="number" onChange={(e) => setPosition({ ...position, y: e.target.value })} value={position?.y} step="0.01" />
+            </div>
+            <div className="input flex">
+              <label htmlFor="">Z</label>
+              <input type="number" onChange={(e) => setPosition({ ...position, z: e.target.value })} value={position?.z} step="0.01"/>
+            </div>
+          </div>
         </div>
       </div>
       <div id="gallery" ref={refCon}></div>

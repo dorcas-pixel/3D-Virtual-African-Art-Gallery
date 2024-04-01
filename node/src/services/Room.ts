@@ -7,6 +7,7 @@ import { IAny, IResponse } from "../interfaces";
 import { Types } from "mongoose";
 
 import frameServices from "./Frame"
+import standServices from "./Stand";
 
 export default class RoomServices {
   static async createRoom(): Promise<any> {
@@ -19,6 +20,7 @@ export default class RoomServices {
       });
 
       frameServices.addFrameToRoom(room._id);
+      standServices.addStandsToRoom(room._id)
 
       return room;
     } catch (e) {
@@ -26,10 +28,11 @@ export default class RoomServices {
     }
   }
 
-  static async getRoom () : Promise<any> {
+  static async getRoom (kind?: string) : Promise<any> {
     let room = await Room.getLatestRoom();
 
-    if (!room || (room && room.count >= 11)) room = RoomServices.createRoom();
+    if (!room || (room && kind && kind == 'model' && room.modelCount >= 6) || 
+      (room && kind && kind == 'portrait' && room.portraitCount >= 11)) room = RoomServices.createRoom();
 
     return room;
   }
@@ -40,7 +43,7 @@ export default class RoomServices {
     if (!roomUniqueId) {
       let room = await RoomServices.getRoom();
 
-      roomUniqueId = room.uniqueId;
+      return room._id as string;
     }
 
     return (await Room.getByUniqueId(roomUniqueId))._id as string;

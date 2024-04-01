@@ -1,8 +1,5 @@
-import Artwork from "../models/Artwork";
-
-import v from "../helpers/Validation";
-
 import { IAny, IResponse } from "../interfaces";
+import { Types } from "mongoose";
 
 import path from "path";
 import decompress from "decompress";

@@ -47,3 +47,19 @@
 .home-cards__item__description{
   padding: 1rem;
 }
+
+.home-gettings-started{
+  padding: 0 11%;
+  column-gap: 2rem;
+}
+
+.home-gettings-started__item{
+  flex: 0 0 calc(100% / 4);
+  padding: 1rem 1.4rem;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+
+.home-gettings-started__item__icon{
+  position: relative;
+}

@@ -38,6 +38,14 @@
   padding: 1rem 2rem;
 }
 
+.cart__list td{
+  border-bottom: 1px solid #eee;
+}
+
+.cart__list tr:last-child td{
+  border-bottom: none;
+}
+
 .cart-popup{
   position: absolute;
   right: 11%;
@@ -48,4 +56,21 @@
   border-radius: 6px;
   padding: 1rem;
   box-shadow: 0 0 4px #e3e3e3, 0 0 1px #e0e0e0;
+}
+
+.checkout-msg{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 18rem auto 0;
+  width: 50rem;
+}
+
+.checkout-msg p, .checkout-msg h1{
+  text-align: center;
+}
+
+.checkout-msg button {
+  width: 10rem;
+  margin: 2rem auto 0;
 }

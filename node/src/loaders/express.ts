@@ -18,22 +18,27 @@ export default async (app: Application) => {
 
     await connectDB()
 
-    app.use(express.static(path.join(__dirname, '../../../react/dist')));
+    if (process.env.NODE_ENV == "production") {
+        app.use(express.static(path.join(__dirname, '../../../react/dist')));
 
-    [
-        '/',
-        '/sign-in',
-        '/sign-up',
-        '/gallery',
-        '/marketplace',
-        '/marketplace/:artworkId',
-        '/cart',
-        '/u/:username'
-    ].forEach((url: string) => {
-        app.get(url, function (_, res) {
+        const routes = [
+           "/",
+            "/sign-in",
+            "/sign-up",
+            "/gallery",
+            "/marketplace",
+            "/marketplace/:artworkId",
+            "/checkout",
+            "/checkout/success",
+            "/u/:username",
+            "/u/:username/cart",
+            "/u/:username/orders"
+        ];
+
+        app.get(routes, function (_, res) {
             res.sendFile(path.join(__dirname, '../../../react/dist', 'index.html'));
         });
-    })
+    }
 
     routes(app);
 };

@@ -34,3 +34,12 @@
   box-shadow: 0 0 4px #777777,
     0 0 1px #848484 !important;
 }
+
+.container__gallery__overlay__scale .position .input{
+  flex-direction: column;
+  flex: 1;
+}
+
+.container__gallery__overlay__scale .position input{
+  width: 10rem;
+}

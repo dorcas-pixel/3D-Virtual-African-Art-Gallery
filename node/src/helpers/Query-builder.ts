@@ -107,4 +107,5 @@ export default class QueryBuilder {
     });
 
     deleteOne = (condition) => this._model.deleteOne(condition);
+    deleteMany = (condition) => this._model.deleteMany(condition);
 };

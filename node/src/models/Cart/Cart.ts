@@ -24,4 +24,10 @@ export default class Cart extends Model {
       _id
     });
   }
+
+  removeAll(_id: string | Types.ObjectId){
+    return this.model.deleteMany({
+      _id
+    })
+  }
 }

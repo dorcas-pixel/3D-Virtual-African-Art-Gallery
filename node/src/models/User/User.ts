@@ -10,6 +10,7 @@ export default class User extends Model {
       username: { type: String },
       email: { type: String, required: true },
       picture: { type: String, default: "blank.jpg" },
+      credit: { type: Number, default: 0 },
       password: { type: String },
     });
 
@@ -20,5 +21,11 @@ export default class User extends Model {
     return this.model.findOneWithOr({
       condition: [{ email: identifier }, { username: identifier }],
     });
+  }
+
+  getById (id: Types.ObjectId | string) {
+    return this.model.findOne({
+      condition: { _id: id }
+    })
   }
 }

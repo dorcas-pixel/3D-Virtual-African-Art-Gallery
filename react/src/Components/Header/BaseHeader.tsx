@@ -12,8 +12,19 @@ export default () => {
       <img src="/logo/png/logo-no-background.png" alt="logo" className="header__logo" />
       <nav className="header__nav">
         <ul className="header__nav__ul flex flex--a-center">
-          <li><b>Home</b></li>
-          <li>Martketplace</li>
+          <li><b><Link to="/">Home</Link></b></li>
+          <li><Link to="/marketplace">Martketplace</Link></li>
+
+          {user ?
+            (
+              <>
+                <li><Link to={`/u/${user.username}`}>Profile</Link></li>
+                <li><Link to={`/u/${user.username}/cart`}>Cart</Link></li>
+                <li><Link to={`/u/${user.username}/orders`}>Orders</Link></li>
+              </>
+            ) :
+            <></>
+          }
         </ul>
       </nav>
       <div className="header__user flex flex--a-center">
@@ -33,7 +44,7 @@ export default () => {
               <Link to="/sign-up" className="btn">Sign up</Link>
             </div>
           )
-          }
+        }
       </div>
     </header>
   )

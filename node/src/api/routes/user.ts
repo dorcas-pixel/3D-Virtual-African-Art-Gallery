@@ -3,8 +3,6 @@ import { Application } from "express";
 import BaseController from "../controllers/base";
 import userService from "../../services/User";
 
-import { IAny, IResponse } from "../../interfaces";
-
 export default (app: Application) => {
   app.post(
     "/sign-up",

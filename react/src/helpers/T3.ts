@@ -2,7 +2,8 @@ import * as T3 from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
-import { getFramesByRoom } from "./artwork";
+import { getFramesByRoom, getStandsByRoom, setFramePortrait, setStandModel } from "./artwork";
+import { BASEURL } from "./URL";
 
 interface IVec {
   x: number,
@@ -24,6 +25,7 @@ export default class T3Helper {
   private frames: Array<any> = [];
   private loadedFrames: Array<any> = []
   private loadedStands: Array<any> = []
+  public loadedModel: any;
   private frameMeshes = new Map();
   private standMeshes = new Map();
   private lastClosestFrame: any;
@@ -142,7 +144,7 @@ export default class T3Helper {
 
     var material = new T3.MeshLambertMaterial({
       map: loader.load(
-        `/assets/uploads/artwork/portraits/${image}`
+        `${BASEURL()}/assets/uploads/artwork/portraits/${image}`
       ),
     });
 
@@ -167,35 +169,53 @@ export default class T3Helper {
     this.scene.add(mesh);
   }
 
-  loadModel (artwork: any) {
-    if (!this.lastClosestStand) return;
+  loadModel (artwork: any, pos: any) {
+    return new Promise((resolve, _) => {
+      this.loader.load(
+        `${BASEURL()}/assets/uploads/artwork/models/${artwork.model.folder}/scene.gltf`,
+        (gltf) => {
+          this.loadedModel = gltf.scene.children[0];
 
-    this.loader.load(
-      `/assets/uploads/artwork/models/${artwork.model.folder}/scene.gltf`,
-      (gltf) => {
-        gltf.scene.children[0].scale.set(0.01, 0.01, 0.01);
+          gltf.scene.children[0].scale.set(.1, .1, .1);
 
-        const x = this.lastClosestStand?.x || 0,
-          y = 0.55,
-          z = this.lastClosestStand?.z || 0;
+          const x = pos.x - .30 || 0,
+            y = .96,
+            z = pos.z - .30 || 0;
 
-        gltf.scene.children[0].position.set(x, y, z);
+          gltf.scene.children[0].position.set(x, y, z);
 
-        // this.scene.add(gltf.scene.children[0]);
-      }
-    );
+          this.scene.add(gltf.scene);
+
+          resolve(gltf.scene.children[0].position)
+        }
+      );
+    })
+  }
+
+  adjustScale (scale: number) {
+    if (this.loadedModel) {
+      this.loadedModel.scale.set(scale, scale, scale)
+    }
+  }
+
+  adjustPosition(pos: any) {
+    if (this.loadedModel) {
+      this.loadedModel.position.set(pos.x, pos.y, pos.z)
+    }
   }
 
   displayPainting(portrait: any) {
-    // setFramePortrait(this.lastClosestFrame.userData.frameId, portrait._id)
-
+    setFramePortrait(this.lastClosestFrame.userData.frameId, portrait._id)
+    
     this.loadImage(portrait.image, this.lastClosestFrame.position, this.lastClosestFrame.userData.rotation);
   }
 
-  displayModel(artwork: any) {
-    // setFramePortrait(this.lastClosestFrame.userData.frameId, portrait._id)
+  async displayModel(artwork: any) {
+    setStandModel(this.lastClosestStand.userData.standId, artwork._id)
 
-    this.loadModel(artwork)
+    if (!this.lastClosestStand) return {x: 0, y: 0, z: 0}
+
+    return await this.loadModel(artwork, this.lastClosestStand.position)
   }
 
   displayPaintings() {
@@ -252,71 +272,29 @@ export default class T3Helper {
   }
 
   displayStands () {
-    (async () => {
-      this.stands = [
-        {
-          position: {
-            x: -3.4,
-            y: 0,
-            z: 4
-          }
-        },
-        {
-          position: {
-            x: -3.4,
-            y: 0,
-            z: 0
-          }
-        },
-        {
-          position: {
-            x: -3.4,
-            y: 0,
-            z: -4
-          }
-        },
-        {
-          position: {
-            x: 3.4,
-            y: 0,
-            z: 4
-          }
-        },
-        {
-          position: {
-            x: 3.4,
-            y: 0,
-            z: 0
-          }
-        },
-        {
-          position: {
-            x: 3.4,
-            y: 0,
-            z: -4
-          }
-        },
-      ];
+    let id = setTimeout(async () => {
+      this.stands = (await getStandsByRoom()).stands;
 
       this.stands.forEach((stand: any) => {
         this.loader.load(`/3D/pedestal/scene.gltf`, (gltf) => {
           this.setObjectPosition(gltf.scene.children[0], stand.position)
           gltf.scene.children[0].scale.set(.05, .05, .05);
 
-          gltf.scene.children[0].userData.standId = Math.random()
+          gltf.scene.children[0].userData.standId = stand._id
 
-          this.loadedStands.push(gltf.scene.children[0])
+          if (!stand.hasModel)
+            this.loadedStands.push(gltf.scene.children[0])
 
           this.scene.add(gltf.scene);
+
+          if (stand.hasModel){
+            this.loadModel(stand.model, stand.position)
+          }
         });
       });
 
-      // this.loader.load(`/3D/pedestal/scene.gltf`, (gltf) => {
-      //   let positions = this.stands.map((stand) => new T3.Vector3(stand.position.x, stand.position.y, stand.position.z));
-
-      //   this.instanceRenderer(this.traverseGroup(gltf.scene.children[0]), positions, new T3.Vector3(.5, .5, .5))
-      // });
-    })()
+      clearTimeout(id);
+    }, 500)
   }
 
   makeText(txt: string) {

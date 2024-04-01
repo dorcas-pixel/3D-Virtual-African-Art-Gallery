@@ -15,6 +15,50 @@ export default () => {
         </div>
       </div>
       <div className="home-title">
+        <h4>Getting started</h4>
+        <p>Create account to earn money with your ART</p>
+      </div>
+      <div className="home-gettings-started flex">
+        <div className="home-gettings-started__item flex">
+          <div className="home-gettings-started__item__icon margin--right-2">
+            <i className="fa-solid fa-user"></i>
+          </div>
+          <div className="home-gettings-started__item__details">
+            <p><b>Create an account</b></p>
+            <p>Get started by creating an account or logging in</p>
+          </div>
+        </div>
+
+        <div className="home-gettings-started__item flex">
+          <div className="home-gettings-started__item__icon margin--right-2">
+            <i className="fa-solid fa-credit-card"></i>
+          </div>
+          <div className="home-gettings-started__item__details">
+            <p><b>Create an account</b></p>
+            <p>Get started by creating an account or logging in</p>
+          </div>
+        </div>
+
+        <div className="home-gettings-started__item flex">
+          <div className="home-gettings-started__item__icon margin--right-2">
+            <i className="fa-solid fa-paint-brush"></i>
+          </div>
+          <div className="home-gettings-started__item__details">
+            <p><b>Upload artwork</b></p>
+            <p>Upload 2D artwork or 3D models to sell</p>
+          </div>
+        </div>
+        <div className="home-gettings-started__item flex">
+          <div className="home-gettings-started__item__icon margin--right-2">
+            <i className="fa-solid fa-receipt"></i>
+          </div>
+          <div className="home-gettings-started__item__details">
+            <p><b>Make money from marketplace</b></p>
+            <p>Upload 2D artwork or 3D models to sell</p>
+          </div>
+        </div>
+      </div>
+      <div className="home-title">
         <h4>Explore styles</h4>
         <p>Enjoy both 2D paintings are 3D models of AFRIKA</p>
       </div>

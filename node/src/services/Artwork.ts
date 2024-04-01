@@ -16,7 +16,7 @@ export default class ArtWorkServices {
     let artwork = await Artwork.getNotReadyByUser(user, kind);
 
     if (!artwork) {
-      let room = await RoomServices.getRoom();
+      let room = await RoomServices.getRoom(kind);
 
       room.count += 1;
 

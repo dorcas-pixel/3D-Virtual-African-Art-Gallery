@@ -1,13 +1,12 @@
 import Model from "../Model";
 
-const ROOM_LIMIT = 4;
-
 export default class Room extends Model {
   constructor(mongoose, QueryBuilder) {
     const schema = new mongoose.Schema({
       name: { type: String },
       uniqueId: { type: String },
-      count: { type: Number, default: 1 },
+      portraitCount: { type: Number, default: 1 },
+      modelCount: { type: Number, default: 1 },
       createdAt: { type: Date, default: Date.now },
     });
 
@@ -16,7 +15,7 @@ export default class Room extends Model {
 
   getLatestRoom = () =>
     this.model.findOne({
-      condition: { count: { $lte: ROOM_LIMIT } },
+      condition: { },
       sort: { createdAt: -1 },
     });
 
