@@ -42,7 +42,7 @@ export default (props: any) => {
         </div>
         <div className="modal__main__footer flex">
           <button className="btn btn--primary margin--right-1">Add Model</button>
-          <button className="btn" onClick={() => closeModal('new-model')}>Cancel</button>
+          <button className="btn" type="button" onClick={() => closeModal('new-model')}>Cancel</button>
         </div>
       </form>
     </div>
