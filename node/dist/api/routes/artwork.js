@@ -11,7 +11,6 @@ const multer_1 = require("../../config/multer");
 exports.default = (app) => {
     app.post("/portrait/add/file", (req, res, next) => {
         (0, multer_1.anyFiles)("./public/assets/uploads/artwork/portraits", "image")(req, res, async (err) => {
-            console.log(err);
             try {
                 await Portrait_1.default.addPortrait(req.body, req);
             }
@@ -39,6 +38,7 @@ exports.default = (app) => {
     }));
     app.post("/model/add/file", (req, res, next) => {
         (0, multer_1.anyFiles)("./public/assets/uploads/artwork/models", "zip")(req, res, async (err) => {
+            console.log('Model upload error', err);
             await Model_1.default.addModelFile(req.body, req);
             next();
         });

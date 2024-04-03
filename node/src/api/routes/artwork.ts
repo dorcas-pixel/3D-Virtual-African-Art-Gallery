@@ -70,6 +70,8 @@ export default (app: Application) => {
         req,
         res,
         async (err) => {
+          console.log('Model upload error', err);
+          
           await modelService.addModelFile(req.body, req);
 
           next();

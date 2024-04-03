@@ -1,0 +1,324 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 16132,
+      "max": [
+        1.0937999486923218,
+        1.5025999546051025,
+        0.9007999897003174
+      ],
+      "min": [
+        0.4339999854564667,
+        1.3111000061035156,
+        0.7093000411987305
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 193584,
+      "componentType": 5126,
+      "count": 16132,
+      "max": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 16132,
+      "max": [
+        0.0,
+        0.0
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 96768,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 387168,
+      "componentType": 5126,
+      "count": 12628,
+      "max": [
+        1.5277999639511108,
+        1.7590000629425049,
+        3.0687999725341797
+      ],
+      "min": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 538704,
+      "componentType": 5126,
+      "count": 12628,
+      "max": [
+        0.9998125433921814,
+        0.9999351501464844,
+        1.0
+      ],
+      "min": [
+        -0.9998133778572083,
+        -0.9999709129333496,
+        -0.9999614953994751
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 12628,
+      "max": [
+        0.9999949336051941,
+        0.9957624673843384,
+        0.9999687671661377,
+        1.0
+      ],
+      "min": [
+        -0.999999463558197,
+        -0.999909520149231,
+        -0.43476757407188416,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 129056,
+      "componentType": 5126,
+      "count": 12628,
+      "max": [
+        0.972000002861023,
+        0.9800000190734863
+      ],
+      "min": [
+        0.019999999552965164,
+        0.019999999552965164
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 387072,
+      "componentType": 5125,
+      "count": 74748,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "vinicius (https://sketchfab.com/viniciusnunescardoso)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/african-93f101c88a1b4582a3ad4f472d30abda",
+      "title": "African"
+    },
+    "generator": "Sketchfab-12.67.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 686064,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 230080,
+      "byteOffset": 686064,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 690240,
+      "byteOffset": 916144,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 202048,
+      "byteOffset": 1606384,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 1808432,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/Scene_-_Root_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "Scene_-_Root",
+      "normalTexture": {
+        "index": 0
+      },
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.07139795738520809,
+          0.033202408746418444,
+          0.010440413915959968,
+          1.0
+        ],
+        "metallicFactor": 0.0626905487804878,
+        "roughnessFactor": 0.4
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Object_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Object_1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TANGENT": 6,
+            "TEXCOORD_0": 7
+          },
+          "indices": 8,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        0.15723715244443515,
+        -0.0008371455314189757,
+        4.7286373116511145e-05,
+        0.0,
+        -4.7287045827998104e-05,
+        -3.490887915028283e-17,
+        0.15723938302758977,
+        0.0,
+        -0.0008371455314189757,
+        -0.15723716181663328,
+        -2.517571435346554e-07,
+        0.0,
+        0.004719994496554136,
+        1.787587285041809,
+        0.2568000555038456,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        -0.7638999819755554,
+        -1.0078999996185303,
+        -0.6406000256538391,
+        1.0
+      ],
+      "name": "african.obj.cleaner.materialmerger.gles"
+    },
+    {
+      "children": [
+        3,
+        4
+      ],
+      "name": "Object_2"
+    },
+    {
+      "mesh": 0,
+      "name": "Object_3"
+    },
+    {
+      "mesh": 1,
+      "name": "Object_4"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    }
+  ]
+}
