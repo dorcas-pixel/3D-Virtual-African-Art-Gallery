@@ -53,10 +53,6 @@ export default () => {
               transactionId: uuid
             })
 
-            await postWithAuth('/user/credit/acc', {
-              credit: parseInt(`${(total / 18)}`)
-            })
-
             nav('/checkout/success')
           });
         }

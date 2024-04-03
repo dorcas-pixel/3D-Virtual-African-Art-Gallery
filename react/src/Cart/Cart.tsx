@@ -9,6 +9,8 @@ import { BASEURL } from "../helpers/URL";
 import "./Cart.css"
 
 export const Popup = (props: any) => {
+  console.log('Rendering Cart');
+
   setTimeout(() => props.clearPopup(), 3000)
 
   return (

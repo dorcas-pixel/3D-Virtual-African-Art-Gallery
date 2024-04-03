@@ -25,9 +25,9 @@ export default class Cart extends Model {
     });
   }
 
-  removeAll(_id: string | Types.ObjectId){
+  removeAllByUser(user: string | Types.ObjectId){
     return this.model.deleteMany({
-      _id
+      user
     })
   }
 }

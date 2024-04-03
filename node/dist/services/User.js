@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = __importDefault(require("../models/User"));
+const Validation_1 = __importDefault(require("../helpers/Validation"));
 const Hasher_1 = __importDefault(require("../helpers/Hasher"));
 const Jwt_1 = __importDefault(require("../helpers/Jwt"));
 function saveSession(user) {
@@ -17,6 +18,17 @@ function removePassword(user) {
 }
 async function createLocalUserAccount(body) {
     try {
+        Validation_1.default.validate({
+            'Full name': { value: body.fullname, min: 3, max: 50 },
+            'Username': { value: body.username, min: 3, max: 50 },
+            'Email address': { value: body.email, min: 3, max: 50 },
+            'Password': { value: body.password, min: 8, max: 50 },
+            'Password again': { value: body.passwordAgain, is: ['Password', 'Passwords don\'t match'] }
+        });
+        if (await User_1.default.exists({ username: body.username }))
+            throw 'Username is already in use';
+        if (await User_1.default.exists({ email: body.email }))
+            throw 'Email address is already in use';
         const newUser = await User_1.default.add({
             fullname: body.fullname,
             username: body.username,

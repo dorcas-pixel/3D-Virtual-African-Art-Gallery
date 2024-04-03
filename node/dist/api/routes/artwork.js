@@ -11,10 +11,17 @@ const multer_1 = require("../../config/multer");
 exports.default = (app) => {
     app.post("/portrait/add/file", (req, res, next) => {
         (0, multer_1.anyFiles)("./public/assets/uploads/artwork/portraits", "image")(req, res, async (err) => {
-            await Portrait_1.default.addPortrait(req.body, req);
+            console.log(err);
+            try {
+                await Portrait_1.default.addPortrait(req.body, req);
+            }
+            catch (error) {
+                req['error'] = error;
+            }
             next();
         });
     }, base_1.default.wrapWithRequest(function (_, req) {
+        this.error = req["error"];
         this.successful = req["success"];
         this.portrait = req["portrait"];
         return this;
@@ -44,10 +51,5 @@ exports.default = (app) => {
     app.post("/works/get/all", base_1.default.wrap(Artwork_1.default.getAll));
     app.post("/works/get/featured", base_1.default.wrap(Artwork_1.default.getFeatured));
     app.post("/works/get/one", base_1.default.wrap(Artwork_1.default.getById));
-    // app.post("/works/delete", baseController.wrap(artWorkService.removeById));
-    // app.post(
-    //   "/works/update/scale",
-    //   baseController.wrap(artWorkService.updateArtworkScale)
-    // );
 };
 //# sourceMappingURL=artwork.js.map

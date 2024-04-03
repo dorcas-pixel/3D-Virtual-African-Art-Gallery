@@ -8,6 +8,8 @@ import { postWithAuth } from "../helpers/http"
 import { formatTime } from "../helpers/date"
 
 export default () => {
+  console.log('Rendering Orders');
+
   const [orders, setOrders] = useState([]) as any;
   const [sellers, setSellers] = useState(new Map()) as any;
 
@@ -48,7 +50,7 @@ export default () => {
   return (
     <Authenticator>
       <AccountHeader />
-      <main className="account flex">
+      <main className="account flex flex--a-start">
         <UserOverview />
         <div className="account__works">
           <div className="account__title">

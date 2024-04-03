@@ -7,7 +7,7 @@ export default class Artwork extends Model {
     const schema = new mongoose.Schema({
       name: { type: String },
       user: { type: Types.ObjectId, ref: "User", required: true },
-      room: { type: Types.ObjectId, ref: "Room" },
+      room: { type: Types.ObjectId, ref: "room" },
       image: { type: String },
       kind: { type: String },
       description: { type: String },
@@ -15,8 +15,7 @@ export default class Artwork extends Model {
       model: {
         type: { type: String },
         file: { type: String },
-        folder: { type: String },
-        scale: { type: Number },
+        folder: { type: String }
       },
       hasImage: { type: Boolean, default: false },
       hasModel: { type: Boolean, default: false },
@@ -65,7 +64,7 @@ export default class Artwork extends Model {
     this.model.findOne({
       condition: { _id, isDeleted: false, isReady: true },
       select,
-      populate: [["user", "-password"]],
+      populate: [["user", "-password"], ['room', 'uniqueId']],
     });
 
   getFeatured = () =>

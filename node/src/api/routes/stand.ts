@@ -13,4 +13,14 @@ export default (app: Application) => {
     "/stands/update/model",
     baseController.wrap(standservices.setStandModel)
   );
+
+  app.post(
+    "/stands/update/model/position",
+    baseController.wrap(standservices.adjustModelPosition)
+  );
+
+  app.post(
+    "/stands/update/model/scale",
+    baseController.wrap(standservices.adjustModelScale)
+  );
 };

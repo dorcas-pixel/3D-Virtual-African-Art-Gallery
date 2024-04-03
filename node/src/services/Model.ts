@@ -1,6 +1,9 @@
 import { IAny, IResponse } from "../interfaces";
 import { Types } from "mongoose";
 
+import v from "../helpers/Validation";
+import Artwork from "../models/Artwork";
+
 import path from "path";
 import decompress from "decompress";
 import ArtWorkServices from "./Artwork";
@@ -69,6 +72,14 @@ export default class ArtModelServices {
     userInfo: IAny
   ): Promise<IResponse> {
     try {
+      v.validate({
+        'Name': { value: body.name, min: 3, max: 50 },
+        'Description': { value: body.description, min: 3, max: 2000 },
+        'Price': { value: body.price, min: 1, max: 8 }
+      });
+
+      if (!(/^[0-9]+$/.test(body.price))) throw 'Price must be a number, 0-9';
+
       const artwork = await ArtWorkServices.getNotReadyOrMakeNew(
         userInfo._id,
         "model"

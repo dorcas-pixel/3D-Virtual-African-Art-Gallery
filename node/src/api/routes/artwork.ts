@@ -17,13 +17,19 @@ export default (app: Application) => {
         req,
         res,
         async (err) => {
-          await portraitService.addPortrait(req.body, req);
+          try {
+            await portraitService.addPortrait(req.body, req);
+
+          } catch (error) {
+            req['error'] = error;
+          }
 
           next();
         }
       );
     },
     baseController.wrapWithRequest(function (_, req) {
+      this.error = req["error"];
       this.successful = req["success"];
       this.portrait = req["portrait"];
 
@@ -95,11 +101,4 @@ export default (app: Application) => {
   );
   
   app.post("/works/get/one", baseController.wrap(artWorkService.getById));
-  
-  // app.post("/works/delete", baseController.wrap(artWorkService.removeById));
-
-  // app.post(
-  //   "/works/update/scale",
-  //   baseController.wrap(artWorkService.updateArtworkScale)
-  // );
 };

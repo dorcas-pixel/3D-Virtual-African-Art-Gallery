@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { postWithNoAuth } from "../helpers/http";
 import { getValueById } from "../helpers/dom";
 import { id } from "../helpers/string";
 
 import "./Auth.css"
+import { showError } from "../helpers/error";
 
 export default () => {
   const [username, setUsername] = useState(null) as any;
@@ -24,7 +25,7 @@ export default () => {
 
     setUsername(res.username);
 
-    // showError('auth', res.error)
+    if (res.error) showError('auth', res.error);
   }
 
   useEffect(() => {
@@ -42,6 +43,10 @@ export default () => {
             <p>Sign in to manage your artworks.</p>
           </div>
           <div className="auth__main__form__body">
+            <div id="auth-error" className="error hide">
+              <p><b>Sorry, </b><span className="error-msg"></span></p>
+            </div>
+
             <div className="input">
               <input type="text" id="fullname" placeholder="Full name" />
             </div>
@@ -63,13 +68,12 @@ export default () => {
             </div>
 
             <div className="flex flex--j-space-between">
-              <p>Keep me signed in</p>
               <p>Forgot password?</p>
             </div>
             <button className="btn btn--primary margin--top-2">Sign up</button>
           </div>
           <div className="auth__main__form__footer">
-            <p>Don't have an account? Sign up.</p>
+            <p>Do you have an account? <b><Link className="hover" to="/sign-in">Sign in.</Link></b></p>
           </div>
         </form>
       </main>

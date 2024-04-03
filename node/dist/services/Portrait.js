@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Validation_1 = __importDefault(require("../helpers/Validation"));
 const Artwork_1 = __importDefault(require("./Artwork"));
 class PortraitServices {
     static async addPortrait(body, req) {
@@ -23,6 +24,13 @@ class PortraitServices {
     static async addPortraitDetails(body, userInfo) {
         try {
             const { name, description, price } = body;
+            Validation_1.default.validate({
+                'Name': { value: name, min: 3, max: 50 },
+                'Description': { value: description, min: 3, max: 2000 },
+                'Price': { value: price, min: 1, max: 8 }
+            });
+            if (!(/^[0-9]+$/.test(price)))
+                throw 'Price must be a number, 0-9';
             const artwork = await Artwork_1.default.getNotReadyOrMakeNew(userInfo._id, "portrait");
             if (!artwork.hasImage)
                 throw "Please upload a portrait first";

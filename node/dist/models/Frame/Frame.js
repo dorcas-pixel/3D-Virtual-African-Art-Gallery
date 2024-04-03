@@ -25,6 +25,9 @@ class Frame extends Model_1.default {
         condition: { room },
         populate: [["portrait"]],
     });
+    getById = (_id) => this.model.findOne({
+        condition: { _id },
+    });
 }
 exports.default = Frame;
 //# sourceMappingURL=Frame.js.map

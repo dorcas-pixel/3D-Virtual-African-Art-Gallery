@@ -11,6 +11,13 @@ class BaseController {
             return await serviceMethod.call(response, req.body);
         }, res);
     };
+    signOut = (req, res) => {
+        this.resWrap((response) => {
+            res.clearCookie('_gallery_sesh');
+            response.successful = true;
+            return response;
+        }, res);
+    };
     wrapWithUser = (serviceMethod) => (req, res) => {
         this.resWrap(async (response) => {
             return await serviceMethod.call(response, req.body, res["locals"]?.userInfo);

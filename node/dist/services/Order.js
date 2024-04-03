@@ -15,7 +15,7 @@ async function add(body, user) {
         let cost = 0;
         items.forEach((item) => {
             artworks.push(item.artwork._id);
-            sellers.push(item.user._id);
+            sellers.push(item.artwork.user);
             cost += item.artwork.price;
         });
         Order_1.default.add({
@@ -34,14 +34,15 @@ async function add(body, user) {
 async function finish(body, user) {
     try {
         const { transactionId } = body;
-        Order_1.default.updateByTransactionId(transactionId, {
+        await Order_1.default.updateByTransactionId(transactionId, {
             status: 'completed'
-        })(await Cart_1.default.getByUser(user._id)).forEach(async (item) => {
+        });
+        (await Cart_1.default.getByUser(user._id)).forEach(async (item) => {
             const user = await User_1.default.getById(item.artwork.user);
             user.credit += item.artwork.price;
             user.save();
         });
-        Cart_1.default.removeAll(user._id);
+        await Cart_1.default.removeAllByUser(user._id);
         return this;
     }
     catch (e) {

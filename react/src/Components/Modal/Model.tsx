@@ -15,11 +15,15 @@ export default (props: any) => {
               id="thumbnail-preview"
               style={{ backgroundImage: "url('/illustrations/geo-1.jpg')", filter: 'opacity(0.5)', height: '15rem', borderRadius: '5px' }}>
             </div>
-            <label className="pos--center" htmlFor="thumbnail-file">Click to add thumbnail</label>
+            <label className="pos--center hover" htmlFor="thumbnail-file">Click to add thumbnail</label>
             <input type="file" id="thumbnail-file" onChange={props.uploadThumbnail} hidden/>
           </div>
 
           <div className="model__main__body__form">
+            <div id="model-error" className="error hide">
+              <p><b>Sorry, </b><span className="error-msg"></span></p>
+            </div>
+
             <div className="input">
               <input type="text" id="model-name" placeholder="Model name" />
             </div>
@@ -33,7 +37,7 @@ export default (props: any) => {
             </div>
 
             <input type="file" id="model-file" onChange={props.uploadModelFile} hidden />
-            <label className="margin--top-1" htmlFor="model-file" style={{display: 'inline-block'}}>Select model zip</label>
+            <label className="margin--top-1 hover" htmlFor="model-file" style={{ display: 'inline-block' }}><i className="fa-solid fa-circle-info margin--right-1"></i>Select model zip</label>
           </div>
         </div>
         <div className="modal__main__footer flex">

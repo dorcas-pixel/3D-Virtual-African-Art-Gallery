@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Frame_1 = __importDefault(require("../models/Frame"));
+const Artwork_1 = __importDefault(require("../models/Artwork"));
 const Room_1 = __importDefault(require("./Room"));
 class FrameServices {
     static async addFrameToRoom(roomId) {
@@ -123,10 +124,13 @@ class FrameServices {
     }
     static async setFramePortrait(body) {
         try {
-            Frame_1.default.updateDetails(body.frameId, {
-                portrait: body.portraitId,
-                hasPortrait: true
-            });
+            const frame = await Frame_1.default.getById(body.frameId);
+            frame.portrait = body.portraitId;
+            frame.hasPortrait = true;
+            const portrait = await Artwork_1.default.getById(body.portraitId);
+            portrait.room = frame.room;
+            frame.save();
+            portrait.save();
             return this;
         }
         catch (e) {

@@ -4,18 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Artwork_1 = __importDefault(require("../models/Artwork"));
-const Room_1 = __importDefault(require("./Room"));
 class ArtWorkServices {
     static async getNotReadyOrMakeNew(user, kind) {
         let artwork = await Artwork_1.default.getNotReadyByUser(user, kind);
         if (!artwork) {
-            let room = await Room_1.default.getRoom(kind);
-            room.count += 1;
-            room.save();
             artwork = await Artwork_1.default.add({
                 user,
-                kind,
-                room: room._id,
+                kind
             });
         }
         return artwork;

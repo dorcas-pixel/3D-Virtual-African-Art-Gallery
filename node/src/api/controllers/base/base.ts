@@ -14,6 +14,16 @@ export default class BaseController {
       }, res);
     };
 
+  signOut = (req, res) => {
+    this.resWrap((response: IResponse) => {
+      res.clearCookie('_gallery_sesh');
+
+      response.successful = true;
+
+      return response;
+    }, res)
+  }
+
   wrapWithUser =
     (serviceMethod: (b: IAny, u: IAny) => Promise<IResponse> | IResponse) =>
     (req: any, res: Response) => {

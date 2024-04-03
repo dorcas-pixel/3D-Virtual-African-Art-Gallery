@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react"
-import { getQuery } from "../helpers/URL"
+import { Link, useParams } from "react-router-dom"
+import { BASEURL, getQuery } from "../helpers/URL"
 import { getElementById, getValueById } from "../helpers/dom"
 import { postWithAuth, postWithAxios } from "../helpers/http"
 import { closeModal, openModal } from "../helpers/modals"
@@ -7,12 +8,12 @@ import { addInputFile } from "../helpers/inputs"
 
 import AccountHeader from "../Components/Header/AccountHeader"
 import Portraint from "../Components/Modal/Portrait"
+import Model from "../Components/Modal/Model"
 import ArtItem from "../Components/ArtItem/ArtItem"
 import Authenticator, { AuthContext } from "../Auth/Authenticator"
 
 import "./account.css"
-import { Link, useParams } from "react-router-dom"
-import Model from "../Components/Modal/Model"
+import { showError } from "../helpers/error"
 
 const getArtworks = async (kind: string): Promise<any> => {
   const res = await postWithAuth('/works/get/all/by/artist', {
@@ -23,6 +24,8 @@ const getArtworks = async (kind: string): Promise<any> => {
 }
 
 export default () => {
+  console.log('Rendering Profile');
+  
   const [works, setWorks] = useState([]);
   const { username } = useParams()
 
@@ -45,8 +48,12 @@ export default () => {
 
     if (res.successful) {
       (getElementById('portrait-preview') as HTMLElement).style.backgroundImage =
-        `url("/assets/uploads/artwork/portraits/${res.portrait}")`;
+        `url("${BASEURL()}/assets/uploads/artwork/portraits/${res.portrait}")`;
+
+      return;
     }
+
+    showError('portrait', res.error);
   };
 
   const uploadThumbnail = async () => {
@@ -56,48 +63,67 @@ export default () => {
 
     if (res.successful) {
       (getElementById('thumbnail-preview') as HTMLElement).style.backgroundImage =
-        `url("/assets/uploads/artwork/thumbnails/${res.thumbnail}")`;
+        `url("${BASEURL()}/assets/uploads/artwork/thumbnails/${res.thumbnail}")`;
+
+      return;
     }
+
+    if (res.error)
+      showError('model', res.error);
   }; 
 
   const uploadModelFile = async () => {
     const data = addInputFile('model-file', 'model');
 
-    await postWithAxios(`/model/add/file`, data)
+    const res = await postWithAxios(`/model/add/file`, data)
+
+    if (res.error)
+      showError('model', res.error);
   }; 
 
   const uploadPortraitDetails = async (e: any) => {
     (e as PointerEvent).preventDefault();
 
-    await postWithAuth('/portrait/add/details', {
+    const res = await postWithAuth('/portrait/add/details', {
       name: getValueById('portrait-name'),
       price: getValueById('portrait-price'),
       description: getValueById('portrait-description'),
     })
 
-    await setArtwork()
+    
+    if (res.successful) {
+      await setArtwork()
 
-    closeModal('new-portrait');
+      return closeModal('new-portrait');
+    }
+      
+    showError('portrait', res.error);
   }
 
   const uploadModelDetails = async (e: any) => {
     (e as PointerEvent).preventDefault();
 
-    await postWithAuth('/model/add/details', {
+    const res = await postWithAuth('/model/add/details', {
       name: getValueById('model-name'),
       price: getValueById('model-price'),
       description: getValueById('model-description'),
     })
 
-    await setArtwork()
+    if (res.successful) {
+      await setArtwork()
 
-    closeModal('new-model');
+      closeModal('new-model');
+
+      return;
+    }
+
+    showError('model', res.error);
   }
 
   return (
     <Authenticator>
       <AccountHeader/>
-      <main className="account flex">
+      <main className="account flex flex--a-start">
         <UserOverview/>
         <div className="account__works">
           <div className="account__title">
@@ -113,13 +139,13 @@ export default () => {
           <div className="account__works__list">
             {works.map((artwork: any) => <ArtItem inProfile={true} key={artwork._id} {...artwork}/>)}
             <div className="account__works__add flex flex--center" style={{ flexDirection: "row" }}>
-              <div className="flex flex--a-center" style={{ flex: '1', flexDirection: 'column' }} onClick={() => openModal('new-portrait')}>
+              <div className="flex flex--a-center hover" style={{ flex: '1', flexDirection: 'column' }} onClick={() => openModal('new-portrait')}>
                 <svg className="image--icon">
                   <use href="#add"></use>
                 </svg>
                 <p>Add Portraint</p>
               </div>
-              <div className="flex flex--a-center" style={{ flex: '1', flexDirection: 'column' }} onClick={() => openModal('new-model')}>
+              <div className="flex flex--a-center hover" style={{ flex: '1', flexDirection: 'column' }} onClick={() => openModal('new-model')}>
                 <svg className="image--icon">
                   <use href="#add"></use>
                 </svg>

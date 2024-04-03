@@ -33,6 +33,14 @@ export default class PortraitServices {
     try {
       const { name, description, price } = body;
 
+      v.validate({
+        'Name': { value: name, min: 3, max: 50 },
+        'Description': { value: description, min: 3, max: 2000 },
+        'Price': { value: price, min: 1, max: 8 }
+      });
+
+      if (!(/^[0-9]+$/.test(price))) throw 'Price must be a number, 0-9';
+
       const artwork = await ArtWorkServices.getNotReadyOrMakeNew(
         userInfo._id,
         "portrait"

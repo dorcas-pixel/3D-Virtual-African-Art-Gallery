@@ -46,9 +46,18 @@ export function setFramePortrait(frameId: string, portraitId: string) {
   });
 }
 
-export function updateArtworkScale(artworkId: string, scale: number) {
-  postWithAuth("/works/update/scale", {
-    artworkId,
+export function updateArtworkScale(standId: string, scale: number) {
+  postWithAuth("/stands/update/model/scale", {
+    standId,
     scale,
+  });
+}
+
+export function updateArtworkPosition(standId: string, position: any) {
+  postWithAuth("/stands/update/model/position", {
+    standId,
+    x: position.x,
+    y: position.y,
+    z: position.z,
   });
 }

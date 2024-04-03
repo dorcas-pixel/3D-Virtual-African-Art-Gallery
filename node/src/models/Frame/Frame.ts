@@ -25,4 +25,8 @@ export default class Frame extends Model {
       condition: { room },
       populate: [["portrait"]],
     });
+
+  getById =(_id: Types.ObjectId | string) => this.model.findOne({
+      condition: { _id },
+    });
 }

@@ -1,4 +1,5 @@
 import Frame from "../models/Frame";
+import Artwork from "../models/Artwork";
 
 import { IAny, IResponse } from "../interfaces";
 import { Types } from "mongoose";
@@ -131,10 +132,18 @@ export default class FrameServices {
     body: IAny
   ): Promise<IResponse> {
     try {
-      Frame.updateDetails(body.frameId, {
-        portrait: body.portraitId,
-        hasPortrait: true
-      });
+
+      const frame = await Frame.getById(body.frameId);
+
+      frame.portrait = body.portraitId;
+      frame.hasPortrait = true
+
+      const portrait = await Artwork.getById(body.portraitId);
+      portrait.room = frame.room;
+
+      frame.save();
+      portrait.save();
+
       return this as unknown as IResponse;
     } catch (e) {
       throw e;

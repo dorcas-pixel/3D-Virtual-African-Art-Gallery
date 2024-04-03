@@ -10,6 +10,7 @@ export default (app: Application) => {
   );
 
   app.post("/sign-in", BaseController.wrap(userService.authLocalUserAccount));
+  app.post("/sign-out", BaseController.signOut);
 
   app.post(
     "/user/get/by/session",

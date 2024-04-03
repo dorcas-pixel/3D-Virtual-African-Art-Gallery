@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Stand_1 = __importDefault(require("../models/Stand"));
+const Artwork_1 = __importDefault(require("../models/Artwork"));
 const Room_1 = __importDefault(require("./Room"));
 class StandServices {
     static async addStandsToRoom(roomId) {
@@ -79,10 +80,43 @@ class StandServices {
     }
     static async setStandModel(body) {
         try {
-            Stand_1.default.updateDetails(body.standId, {
-                model: body.modelId,
-                hasModel: true
+            const stand = await Stand_1.default.getById(body.standId);
+            stand.model = body.modelId;
+            stand.hasModel = true;
+            const model = await Artwork_1.default.getById(body.modelId);
+            model.room = stand.room;
+            stand.save();
+            model.save();
+            return this;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+    static async adjustModelScale(body) {
+        try {
+            const { standId, scale } = body;
+            await Stand_1.default.updateDetails(standId, {
+                'modelScale': scale
             });
+            this['successful'] = true;
+            return this;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+    static async adjustModelPosition(body) {
+        try {
+            const { standId, x, y, z } = body;
+            await Stand_1.default.updateDetails(standId, {
+                'modelPosition': {
+                    x,
+                    y,
+                    z
+                }
+            });
+            this['successful'] = true;
             return this;
         }
         catch (e) {

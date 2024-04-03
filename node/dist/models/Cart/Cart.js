@@ -24,9 +24,9 @@ class Cart extends Model_1.default {
             _id
         });
     }
-    removeAll(_id) {
+    removeAllByUser(user) {
         return this.model.deleteMany({
-            _id
+            user
         });
     }
 }

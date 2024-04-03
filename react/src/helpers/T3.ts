@@ -2,7 +2,7 @@ import * as T3 from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { PointerLockControls } from "three/examples/jsm/Addons.js";
-import { getFramesByRoom, getStandsByRoom, setFramePortrait, setStandModel } from "./artwork";
+import { getFramesByRoom, getStandsByRoom, setFramePortrait, setStandModel, updateArtworkPosition, updateArtworkScale } from "./artwork";
 import { BASEURL } from "./URL";
 
 interface IVec {
@@ -169,18 +169,20 @@ export default class T3Helper {
     this.scene.add(mesh);
   }
 
-  loadModel (artwork: any, pos: any) {
+  loadModel (artwork: any, pos: any, scale: number = 1, modelPosition = true) {
     return new Promise((resolve, _) => {
       this.loader.load(
         `${BASEURL()}/assets/uploads/artwork/models/${artwork.model.folder}/scene.gltf`,
         (gltf) => {
           this.loadedModel = gltf.scene.children[0];
 
-          gltf.scene.children[0].scale.set(.1, .1, .1);
+          gltf.scene.children[0].scale.set(scale, scale, scale);
 
-          const x = pos.x - .30 || 0,
-            y = .96,
-            z = pos.z - .30 || 0;
+          this.loadedModel.userData.modelId = artwork._id;
+
+          const x = modelPosition ? (pos.x - .30 || 0) : pos.x,
+            y = modelPosition ? .96 : pos.y,
+            z = modelPosition ? (pos.z - .30 || 0) : pos.z;
 
           gltf.scene.children[0].position.set(x, y, z);
 
@@ -194,12 +196,18 @@ export default class T3Helper {
 
   adjustScale (scale: number) {
     if (this.loadedModel) {
+      updateArtworkScale(this.lastClosestStand.userData.standId, scale);
+      
       this.loadedModel.scale.set(scale, scale, scale)
     }
   }
 
   adjustPosition(pos: any) {
     if (this.loadedModel) {
+      updateArtworkPosition(this.lastClosestStand.userData.standId, {
+        x: pos.x, y: pos.y, z: pos.z
+      })
+
       this.loadedModel.position.set(pos.x, pos.y, pos.z)
     }
   }
@@ -229,19 +237,21 @@ export default class T3Helper {
           const rotation = frame.rotation;
           const position = frame.position;
 
-          const textMesh = this.makeText('0909')
+          // const portrait = frame.portrait;
 
-          if (textMesh)
-            this.setObjectPosition(textMesh, {
-              x: position.x + (this.isXOffset(rotation) ? this.getXOffset(rotation) : 0),
-              y: .7,
-              z: position.z + (this.isZOffset(rotation) ? 0.01 : 0)
-            })
+          // const textMesh = this.makeText(portrait && portrait.name ? portrait.name : 'No portrait')
+
+          // if (textMesh)
+          //   this.setObjectPosition(textMesh, {
+          //     x: position.x + (this.isXOffset(rotation) ? this.getXOffset(rotation) : 0),
+          //     y: .7,
+          //     z: position.z + (this.isZOffset(rotation) ? 0.01 : 0)
+          //   })
 
           if (rotation) {
             this.setRotation(gltf.scene.children[0], rotation, 'rotateZ')
 
-            if (textMesh) this.setRotation(textMesh, rotation)
+            // if (textMesh) this.setRotation(textMesh, rotation)
           }
 
           gltf.scene.children[0].scale.set(1.6, 0.7, 1);
@@ -252,7 +262,7 @@ export default class T3Helper {
 
           this.loadedFrames.push(gltf.scene.children[0])
 
-          if (textMesh) this.scene.add(textMesh)
+          // if (textMesh) this.scene.add(textMesh)
 
           this.scene.add(gltf.scene);
 
@@ -288,7 +298,15 @@ export default class T3Helper {
           this.scene.add(gltf.scene);
 
           if (stand.hasModel){
-            this.loadModel(stand.model, stand.position)
+            let position = stand?.modelPosition;
+            let scale = stand?.modelScale;
+
+            this.loadModel(
+              stand.model, 
+              position || stand.position,
+              scale || 1,
+              position ? false : true
+            )
           }
         });
       });
@@ -299,12 +317,23 @@ export default class T3Helper {
 
   makeText(txt: string) {
     const canvas = document.createElement('canvas')
+    // canvas.width = 100;
+
     const ctx = canvas.getContext('2d')
 
     if (!ctx) return null;
 
-    ctx.fillStyle = 'green'
+    ctx.beginPath();
+    ctx.moveTo(5, 0);
+    // ctx.lineTo(x, canvas.height);
+    // ctx.stroke();
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'black'
     ctx.font = '30px sans-serif'
+    // ctx.textAlign = "left";
+    
     ctx.fillText(txt, 0, 30)
 
     const texture = new T3.Texture(canvas)

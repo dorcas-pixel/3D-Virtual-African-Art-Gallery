@@ -1,15 +1,32 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import BaseHeader from "../Components/Header/BaseHeader"
 import Session from "../Auth/Session"
 
 import "./Marketplace.css"
 import { postWithAuth } from "../helpers/http";
 import { BASEURL } from "../helpers/URL";
+import { Popup } from "../Cart/Cart";
 
 export default () => {
+  console.log('Rendering Product');
+
+  const [popupMsg, setPopupMsg] = useState('');
   const [artwork, setArtworks] = useState(null) as any;
+
   const { artworkId } = useParams()
+
+  function clearPopup() {
+    setPopupMsg('');
+  }
+
+  function addToCart(artworkId: string) {
+    postWithAuth('/cart/add', {
+      artworkId
+    })
+
+    setPopupMsg('Item added to cart');
+  }
 
   async function getArtwork () {
     return postWithAuth('/works/get/one', {
@@ -31,6 +48,9 @@ export default () => {
     })()
   }, []);
 
+  console.log(artwork?.room);
+  
+
   return (
     <Session>
       <BaseHeader />
@@ -50,16 +70,23 @@ export default () => {
               <p>R{artwork.price}</p>
 
               <div className="flex margin--top-2">
-                <button className="btn btn--primary margin--right-2">Add to cart</button>
-                <button className="btn">View in museum</button>
+                <button className="btn btn--primary margin--right-2" onClick={() => addToCart(artwork._id)}>Add to cart</button>
+                {artwork.room && (<Link to={`/gallery?room=${artwork.room.uniqueId}`}><button className="btn">View in museum</button></Link>)}
               </div>
 
               <p className="margin--top-2"><b>Description</b></p>
               <p>{artwork.description}</p>
             </div>
           </div>
+          
         )
       }
+
+      {popupMsg && (
+        <Popup clearPopup={clearPopup}>
+          {popupMsg}
+        </Popup>
+      )}
       
     </Session>
   )

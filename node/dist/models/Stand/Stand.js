@@ -13,6 +13,12 @@ class Stand extends Model_1.default {
                 y: { type: Number, required: true },
                 z: { type: Number, required: true },
             },
+            modelScale: { type: Number },
+            modelPosition: {
+                x: { type: Number },
+                y: { type: Number },
+                z: { type: Number }
+            },
             hasModel: { type: Boolean, default: false },
             model: { type: mongoose_1.Types.ObjectId, ref: "artwork" },
             room: { type: mongoose_1.Types.ObjectId, ref: "room" },
@@ -22,6 +28,9 @@ class Stand extends Model_1.default {
     getByRoom = (room) => this.model.find({
         condition: { room },
         populate: [["model"]],
+    });
+    getById = (_id) => this.model.findOne({
+        condition: { _id },
     });
 }
 exports.default = Stand;

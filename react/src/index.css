@@ -1,6 +1,7 @@
 :root {
   --primary-1: #ffcaca;
   --primary-2: #ffa3a3;
+  --primary-3: #ff6161;
 }
 
 html {
@@ -84,6 +85,7 @@ li {
   padding: .6rem 1.4rem;
   border: none;
   border-radius: 6px;
+  cursor: pointer;
 }
 
 .btn--primary {
@@ -130,6 +132,20 @@ li {
 
 .container{
   padding: 0 11%;
+}
+
+.error{
+  color: darkred;
+  margin-bottom: 1rem;
+}
+
+.hover:hover{
+  color: var(--primary-2);
+  cursor: pointer;
+}
+
+.hover:hover svg{
+  fill: var(--primary-2);
 }
 
 .flex {

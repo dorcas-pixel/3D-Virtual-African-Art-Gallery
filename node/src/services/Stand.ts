@@ -1,4 +1,5 @@
 import Stand from "../models/Stand";
+import Artwork from "../models/Artwork";
 
 import { IAny, IResponse } from "../interfaces";
 import { Types } from "mongoose";
@@ -84,10 +85,56 @@ export default class StandServices {
     body: IAny
   ): Promise<IResponse> {
     try {
-      Stand.updateDetails(body.standId, {
-        model: body.modelId,
-        hasModel: true
-      });
+      const stand = await Stand.getById(body.standId);
+
+      stand.model = body.modelId;
+      stand.hasModel = true
+
+      const model = await Artwork.getById(body.modelId);
+      model.room = stand.room;
+
+      stand.save();
+      model.save();
+      return this as unknown as IResponse;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  static async adjustModelScale(
+    body: IAny
+  ): Promise<IResponse> {
+    try {
+      const { standId, scale } = body;
+
+      await Stand.updateDetails(standId, {
+        'modelScale': scale
+      })
+
+      this['successful'] = true;
+
+      return this as unknown as IResponse;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  static async adjustModelPosition(
+    body: IAny
+  ): Promise<IResponse> {
+    try {
+      const { standId, x, y, z } = body;
+
+      await Stand.updateDetails(standId, {
+        'modelPosition': {
+          x,
+          y,
+          z
+        }
+      })
+
+      this['successful'] = true;
+
       return this as unknown as IResponse;
     } catch (e) {
       throw e;

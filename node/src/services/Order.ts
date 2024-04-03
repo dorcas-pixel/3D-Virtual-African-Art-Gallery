@@ -15,7 +15,7 @@ async function add (body: IAny, user: IAny) {
 
     items.forEach((item: any) => {
       artworks.push(item.artwork._id);
-      sellers.push(item.user._id)
+      sellers.push(item.artwork.user)
 
       cost += item.artwork.price;
     });
@@ -36,9 +36,9 @@ async function finish(body: IAny, user: IAny) {
   try {
     const { transactionId } = body;
 
-    Order.updateByTransactionId(transactionId, {
+    await Order.updateByTransactionId(transactionId, {
       status: 'completed'
-    })
+    });
 
     (await Cart.getByUser(user._id)).forEach(async (item: any) => {
       const user = await User.getById(item.artwork.user);
@@ -48,7 +48,7 @@ async function finish(body: IAny, user: IAny) {
       user.save()
     });
 
-    Cart.removeAll(user._id);
+    await Cart.removeAllByUser(user._id);
 
     return this;
   } catch (e) { throw e }

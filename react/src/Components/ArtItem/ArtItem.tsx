@@ -24,8 +24,8 @@ export default (props: any) => {
           <p>{props.user.fullname}</p>
 
           <div className="flex margin--top-1">
-            <p className="margin--right-2"><Link to={`/marketplace/${props._id}`}><i className="fa-solid fa-circle-question"></i> <span>See more</span></Link></p>
-            {!props.inProfile && (<p onClick={() => addToCart(props._id)}><i className="fa-solid fa-cart-plus"></i> <span>Add to cart</span></p>)}
+            <p className="art-items__details__view-art margin--right-2"><Link to={`/marketplace/${props._id}`}><i className="fa-solid fa-circle-question"></i> <span>See more</span></Link></p>
+            {!props.inProfile && (<p className="art-items__details__cart" onClick={() => addToCart(props._id)}><i className="fa-solid fa-cart-plus"></i> <span>Add to cart</span></p>)}
           </div>
         </div>
       </div>

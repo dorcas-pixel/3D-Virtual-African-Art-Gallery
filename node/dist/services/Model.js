@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const Validation_1 = __importDefault(require("../helpers/Validation"));
 const path_1 = __importDefault(require("path"));
 const decompress_1 = __importDefault(require("decompress"));
 const Artwork_1 = __importDefault(require("./Artwork"));
@@ -46,6 +47,13 @@ class ArtModelServices {
     }
     static async addModelDetails(body, userInfo) {
         try {
+            Validation_1.default.validate({
+                'Name': { value: body.name, min: 3, max: 50 },
+                'Description': { value: body.description, min: 3, max: 2000 },
+                'Price': { value: body.price, min: 1, max: 8 }
+            });
+            if (!(/^[0-9]+$/.test(body.price)))
+                throw 'Price must be a number, 0-9';
             const artwork = await Artwork_1.default.getNotReadyOrMakeNew(userInfo._id, "model");
             // if (!artwork.hasImage) throw 'Please upload a thumbnail first';
             if (!artwork.hasModel)

@@ -21,6 +21,17 @@ function removePassword(user: any) {
 
 async function createLocalUserAccount(body: any): Promise<IResponse> {
   try {
+    v.validate({
+      'Full name': { value: body.fullname, min: 3, max: 50 },
+      'Username': { value: body.username, min: 3, max: 50 },
+      'Email address': { value: body.email, min: 3, max: 50 },
+      'Password': { value: body.password, min: 8, max: 50 },
+      'Password again': { value: body.passwordAgain, is: ['Password', 'Passwords don\'t match'] }
+    });
+
+    if (await User.exists({ username: body.username })) throw 'Username is already in use'
+    if (await User.exists({ email: body.email })) throw 'Email address is already in use'
+
     const newUser = await User.add({
       fullname: body.fullname,
       username: body.username,

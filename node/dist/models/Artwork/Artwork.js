@@ -10,7 +10,7 @@ class Artwork extends Model_1.default {
         const schema = new mongoose.Schema({
             name: { type: String },
             user: { type: mongoose_1.Types.ObjectId, ref: "User", required: true },
-            room: { type: mongoose_1.Types.ObjectId, ref: "Room" },
+            room: { type: mongoose_1.Types.ObjectId, ref: "room" },
             image: { type: String },
             kind: { type: String },
             description: { type: String },
@@ -18,8 +18,7 @@ class Artwork extends Model_1.default {
             model: {
                 type: { type: String },
                 file: { type: String },
-                folder: { type: String },
-                scale: { type: Number },
+                folder: { type: String }
             },
             hasImage: { type: Boolean, default: false },
             hasModel: { type: Boolean, default: false },
@@ -53,7 +52,7 @@ class Artwork extends Model_1.default {
     getById = (_id, select = "") => this.model.findOne({
         condition: { _id, isDeleted: false, isReady: true },
         select,
-        populate: [["user", "-password"]],
+        populate: [["user", "-password"], ['room', 'uniqueId']],
     });
     getFeatured = () => this.model.find({
         condition: {},

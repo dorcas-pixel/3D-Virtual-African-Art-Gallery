@@ -5,26 +5,14 @@ import T3Helper from "../helpers/T3"
 
 import "./Gallery.css"
 import { getArtistWorks } from "../helpers/artwork";
-
-const threeHelper = new T3Helper(window.innerWidth, window.innerHeight);
-if (threeHelper.renderer.getContext()){
-  threeHelper.setCameraPosition()
-
-  threeHelper.loader.load(`/3D/vr_gallery/scene.gltf`, (gltf: any) => {
-    gltf.scene.children[0].rotation.z = threeHelper.degToRad(-90)
-
-    threeHelper.scene.add(gltf.scene.children[0])
-
-    threeHelper.animate()
-  })
-
-  threeHelper.displayStands();
-  threeHelper.displayPaintings();
-}
+import { Link } from "react-router-dom";
 
 export default () => {
+  console.log('Rendering Gallery');
+
   const refCon = useRef(null);
 
+  const [threeHelper, setThreeHelper] = useState(null) as any;
   const [portraits, setPortraits] = useState([]) as any;
   const [models, setModels] = useState([]) as any;
   const [position, setPosition] = useState({
@@ -33,16 +21,38 @@ export default () => {
     x: 0
   }) as any;
 
-  useEffect(() => {
-    refCon.current &&
-      (refCon.current as HTMLElement).appendChild(threeHelper.renderer.domElement);
 
-    refCon.current &&
-      (refCon.current as HTMLElement).appendChild(threeHelper.stats.dom)
+  useEffect(() => {
+    setThreeHelper(new T3Helper(window.innerWidth, window.innerHeight));
   }, [])
 
   useEffect(() => {
-    threeHelper.adjustPosition(position)
+    if (threeHelper?.renderer.getContext()) {
+      threeHelper.setCameraPosition()
+
+      threeHelper.loader.load(`/3D/vr_gallery/scene.gltf`, (gltf: any) => {
+        gltf.scene.children[0].rotation.z = threeHelper.degToRad(-90)
+
+        threeHelper.scene.add(gltf.scene.children[0])
+
+        threeHelper.animate()
+      })
+
+      threeHelper.displayStands();
+      threeHelper.displayPaintings();
+    }
+
+    if (threeHelper) {
+      refCon.current &&
+        (refCon.current as HTMLElement).appendChild(threeHelper?.renderer.domElement);
+
+      refCon.current &&
+        (refCon.current as HTMLElement).appendChild(threeHelper?.stats.dom)
+    }
+  }, [threeHelper])
+
+  useEffect(() => {
+    threeHelper?.adjustPosition(position)
   }, [position])
 
   const startTour = () => {
@@ -84,9 +94,11 @@ export default () => {
 		<main className="container__gallery">
       <div id="tour-menu" className="container__gallery__overlay">
         <ul className="container__gallery__overlay__horiz-menu flex">
-          <li onClick={startTour}>Continue tour</li>
-          <li onClick={showModels}>Upload model</li>
-          <li onClick={showPortraits}>Upload portrait</li>
+          <li className="hover"><Link to="/">Go Home</Link></li>
+          <li className="hover"><Link to="/marketplace">Go Marketplace</Link></li>
+          <li className="hover" onClick={startTour}>Continue tour</li>
+          <li className="hover" onClick={showModels}>Upload model</li>
+          <li className="hover" onClick={showPortraits}>Upload portrait</li>
         </ul>
         <p className="container__gallery__overlay__tips">Use <b>WASD</b> keys for movement, and the <b>esc</b> key to stop tour</p>
       

@@ -17,3 +17,12 @@
 .art-items__details__desc{
   flex: 1;
 }
+
+.art-items__details__view-art{
+  color: var(--primary-3);
+}
+
+.art-items__details__cart{
+  color: #515b81;
+  cursor: pointer;
+}

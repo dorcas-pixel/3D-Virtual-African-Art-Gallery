@@ -17,6 +17,8 @@ const getArtworks = async (kind: string): Promise<any> => {
 }
 
 export default () => {
+  console.log('Rendering Mart');
+
   const [works, setWorks] = useState([]);
   const [popupMsg, setPopupMsg] = useState('');
 

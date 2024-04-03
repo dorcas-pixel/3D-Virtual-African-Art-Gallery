@@ -4,6 +4,7 @@ import { postWithNoAuth } from "../helpers/http";
 import { getValueById } from "../helpers/dom";
 
 import "./Auth.css"
+import { showError } from "../helpers/error";
 
 export default () => {
   const [username, setUsername] = useState(null) as any;
@@ -20,7 +21,7 @@ export default () => {
 
     setUsername(res.username);
 
-    // showError('auth', res.error)
+    if (res.error) showError('auth', res.error);
   }
 
   useEffect(() => {
@@ -38,6 +39,9 @@ export default () => {
             <p>Sign in to manage your artworks.</p>
           </div>
           <div className="auth__main__form__body">
+            <div id="auth-error" className="error hide">
+              <p><b>Sorry, </b><span className="error-msg"></span></p>
+            </div>
             <div className="input">
               <input type="text" id="identifier" placeholder="Email address or Username" />
             </div>
@@ -47,13 +51,12 @@ export default () => {
             </div>
 
             <div className="flex flex--j-space-between">
-              <p>Keep me signed in</p>
               <p>Forgot password?</p>
             </div>
             <button className="btn btn--primary margin--top-2">Sign in</button>
           </div>
           <div className="auth__main__form__footer">
-            <p>Don't have an account? <Link to="/sign-up">Sign up.</Link></p>
+            <p>Don't have an account? <b><Link className="hover" to="/sign-up">Sign up.</Link></b></p>
           </div>
         </form>
       </main>
