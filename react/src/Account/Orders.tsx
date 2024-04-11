@@ -48,7 +48,7 @@ export default () => {
   }, [])
 
   return (
-    <Authenticator>
+    <Authenticator sameUser={true}>
       <AccountHeader />
       <main className="account flex flex--a-start">
         <UserOverview />

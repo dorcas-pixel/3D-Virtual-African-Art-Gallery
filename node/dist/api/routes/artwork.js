@@ -48,6 +48,7 @@ exports.default = (app) => {
     }));
     app.post("/model/add/details", base_1.default.wrapWithUser(Model_1.default.addModelDetails));
     app.post("/works/get/all/by/artist", base_1.default.wrapWithUser(Artwork_1.default.getAllByUser));
+    app.post("/works/get/all/by/artist/username", base_1.default.wrap(Artwork_1.default.getAllByUsername));
     app.post("/works/get/all", base_1.default.wrap(Artwork_1.default.getAll));
     app.post("/works/get/featured", base_1.default.wrap(Artwork_1.default.getFeatured));
     app.post("/works/get/one", base_1.default.wrap(Artwork_1.default.getById));

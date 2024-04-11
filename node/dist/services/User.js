@@ -37,7 +37,7 @@ async function createLocalUserAccount(body) {
         });
         saveSession.call(this, removePassword(newUser.toJSON()));
         this.successful = true;
-        this.username = body.username;
+        this.user = newUser.toObject();
     }
     catch (error) {
         throw error;
@@ -53,7 +53,7 @@ async function authLocalUserAccount(body) {
             throw `Email address, username, already registered with ${user.authType}`;
         saveSession.call(this, removePassword(user.toJSON()));
         this.successful = true;
-        this.username = user.username;
+        this.user = user.toObject();
     }
     catch (error) {
         throw error;
@@ -64,5 +64,10 @@ async function getUserSession(_, user) {
     this.user = user;
     return this;
 }
-exports.default = { getUserSession, createLocalUserAccount, authLocalUserAccount };
+async function getUserByUsername(body) {
+    const user = await User_1.default.getByUsername(body.username);
+    this.user = user;
+    return this;
+}
+exports.default = { getUserSession, createLocalUserAccount, authLocalUserAccount, getUserByUsername };
 //# sourceMappingURL=User.js.map

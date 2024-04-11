@@ -48,14 +48,12 @@ export const rememberUser = async (user: any) => {
   session.set("user", user);
 };
 
-export const getLoggedInUser = async (username: string | null | undefined) => {
+export const getUserByUsername = async (username: string | null | undefined) => {
   if (!username) return false;
 
-  let res: any = await postWithAuth("/user/verify", {
+  let res: any = await postWithAuth("/user/get/by/username", {
     username,
   });
-
-  session.set("user", res.user);
 
   return res.user;
 };

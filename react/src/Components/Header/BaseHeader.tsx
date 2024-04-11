@@ -23,7 +23,6 @@ export default () => {
         <ul className="header__nav__ul flex flex--a-center">
           <li className="hover"><b><Link to="/">Home</Link></b></li>
           <li className="hover"><Link to="/marketplace">Marketplace</Link></li>
-          <li className="hover"><Link to="/gallery">Gallery</Link></li>
 
           {user ?
             (

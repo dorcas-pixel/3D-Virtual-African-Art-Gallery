@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Frame_1 = __importDefault(require("../models/Frame"));
+const Room_1 = __importDefault(require("../models/Room"));
 const Artwork_1 = __importDefault(require("../models/Artwork"));
-const Room_1 = __importDefault(require("./Room"));
 class FrameServices {
     static async addFrameToRoom(roomId) {
         try {
@@ -115,7 +115,12 @@ class FrameServices {
     }
     static async getFramesByRoom(body) {
         try {
-            this.frames = await Frame_1.default.getByRoom(await Room_1.default.getRoomIdOrDefault(body.uniqueId));
+            if (!body.uniqueId)
+                throw 'Could not find room';
+            const room = await Room_1.default.getByUniqueId(body.uniqueId);
+            if (!room)
+                throw 'Could not find room';
+            this.frames = await Frame_1.default.getByRoom(room._id);
             return this;
         }
         catch (e) {

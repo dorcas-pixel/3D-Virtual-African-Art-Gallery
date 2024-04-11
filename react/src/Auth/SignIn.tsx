@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { postWithNoAuth } from "../helpers/http";
+import { postWithNoAuth, rememberUser } from "../helpers/http";
 import { getValueById } from "../helpers/dom";
 
 import "./Auth.css"
@@ -19,7 +19,8 @@ export default () => {
       password: getValueById('password')
     }, true)
 
-    setUsername(res.username);
+    setUsername(res.user.username);
+    rememberUser(res.user)
 
     if (res.error) showError('auth', res.error);
   }

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Artwork_1 = __importDefault(require("../models/Artwork"));
+const User_1 = __importDefault(require("../models/User"));
 class ArtWorkServices {
     static async getNotReadyOrMakeNew(user, kind) {
         let artwork = await Artwork_1.default.getNotReadyByUser(user, kind);
@@ -38,6 +39,25 @@ class ArtWorkServices {
                 this['works'] = await Artwork_1.default.getAllReadyByUser(userInfo._id);
             else
                 this['works'] = await Artwork_1.default.getAllReadyByUserAndKind(userInfo._id, kind);
+            this['successful'] = true;
+            return this;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+    static async getAllByUsername(body) {
+        const { kind, username } = body;
+        try {
+            this['works'] = [];
+            const user = await User_1.default.getByUsername(username);
+            if (!user)
+                return this;
+            ;
+            if (!kind)
+                this['works'] = await Artwork_1.default.getAllReadyByUser(user._id);
+            else
+                this['works'] = await Artwork_1.default.getAllReadyByUserAndKind(user._id, kind);
             this['successful'] = true;
             return this;
         }

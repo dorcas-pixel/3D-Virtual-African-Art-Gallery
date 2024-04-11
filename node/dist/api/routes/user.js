@@ -10,5 +10,6 @@ exports.default = (app) => {
     app.post("/sign-in", base_1.default.wrap(User_1.default.authLocalUserAccount));
     app.post("/sign-out", base_1.default.signOut);
     app.post("/user/get/by/session", base_1.default.wrapWithUser(User_1.default.getUserSession));
+    app.post("/user/get/by/username", base_1.default.wrap(User_1.default.getUserByUsername));
 };
 //# sourceMappingURL=user.js.map

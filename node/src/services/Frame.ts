@@ -1,10 +1,9 @@
 import Frame from "../models/Frame";
+import Room from "../models/Room";
 import Artwork from "../models/Artwork";
 
 import { IAny, IResponse } from "../interfaces";
 import { Types } from "mongoose";
-
-import roomServices from "./Room";
 
 export default class FrameServices {
   static async addFrameToRoom(roomId: string | Types.ObjectId) {
@@ -119,9 +118,13 @@ export default class FrameServices {
     body: IAny
   ): Promise<IResponse> {
     try {
-      (this as unknown as IResponse).frames = await Frame.getByRoom(
-        await roomServices.getRoomIdOrDefault(body.uniqueId)
-      );
+      if (!body.uniqueId) throw 'Could not find room';
+
+      const room = await Room.getByUniqueId(body.uniqueId);
+
+      if (!room) throw 'Could not find room';
+
+      (this as unknown as IResponse).frames = await Frame.getByRoom(room._id);
       return this as unknown as IResponse;
     } catch (e) {
       throw e;

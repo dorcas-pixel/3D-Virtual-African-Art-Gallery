@@ -14,7 +14,7 @@ export default () => {
 
   const [threeHelper, setThreeHelper] = useState(null) as any;
   const [portraits, setPortraits] = useState([]) as any;
-  const [models, setModels] = useState([]) as any;
+  const [models, _] = useState([]) as any;
   const [position, setPosition] = useState({
     z: 0,
     y: 0,
@@ -38,7 +38,7 @@ export default () => {
         threeHelper.animate()
       })
 
-      threeHelper.displayStands();
+      // threeHelper.displayStands();
       threeHelper.displayPaintings();
     }
 
@@ -80,12 +80,6 @@ export default () => {
     getElementById('model-scale')?.classList.remove('hide');
   }
 
-  const showModels = async () => {
-    getElementById('model-selections')?.classList.remove('hide');
-
-    setModels((await getArtistWorks('model')).works)
-  }
-
   const adjustScale = () => {
     threeHelper.adjustScale(parseFloat(getValueById('scale-input') as string));
   }
@@ -97,7 +91,6 @@ export default () => {
           <li className="hover"><Link to="/">Go Home</Link></li>
           <li className="hover"><Link to="/marketplace">Go Marketplace</Link></li>
           <li className="hover" onClick={startTour}>Continue tour</li>
-          <li className="hover" onClick={showModels}>Upload model</li>
           <li className="hover" onClick={showPortraits}>Upload portrait</li>
         </ul>
         <p className="container__gallery__overlay__tips">Use <b>WASD</b> keys for movement, and the <b>esc</b> key to stop tour</p>

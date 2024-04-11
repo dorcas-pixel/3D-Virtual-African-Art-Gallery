@@ -31,7 +31,7 @@
   margin-bottom: 2.2rem;
 }
 
-.browse__works, .account__works{
+.browse__works, .account__works, .account__rooms{
   flex: 1;
 }
 
@@ -49,20 +49,29 @@
   background-color: var(--primary-2) !important;
 }
 
-.browse__works__list, .account__works__list{
+.browse__works__list, .account__works__list,.account__rooms__list{
   display: grid;
   gap: 2rem;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 3rem;
 }
 
-.account__works__add{
+.account__works__add, .account__rooms__add{
   flex-direction: column;
   border: 2px dashed #eee;
   border-radius: 6px;
   height: 16rem;
 }
 
-.account__works__add svg{
+.account__works__add svg, .account__rooms__add{
   margin-bottom: .3rem;
+}
+
+.account-not-found img{
+  width: 30rem;
+  margin: 15rem auto 3rem;
+}
+
+.account-not-found h4, .account-not-found p{
+  text-align: center;
 }

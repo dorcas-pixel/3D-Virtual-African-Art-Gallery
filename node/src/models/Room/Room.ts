@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import Model from "../Model";
 
 export default class Room extends Model {
@@ -5,8 +6,8 @@ export default class Room extends Model {
     const schema = new mongoose.Schema({
       name: { type: String },
       uniqueId: { type: String },
+      artist: { type: Types.ObjectId, ref: "user" },
       portraitCount: { type: Number, default: 1 },
-      modelCount: { type: Number, default: 1 },
       createdAt: { type: Date, default: Date.now },
     });
 
@@ -22,5 +23,10 @@ export default class Room extends Model {
   getByUniqueId = (uniqueId: string) =>
     this.model.findOne({
       condition: { uniqueId },
+    });
+
+  getByArtist = (artist: Types.ObjectId | string) =>
+    this.model.find({
+      condition: { artist }
     });
 }

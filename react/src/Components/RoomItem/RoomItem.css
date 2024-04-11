@@ -1,0 +1,28 @@
+.room-item__background {
+  height: 15rem;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.room-item__details {
+  padding: .5rem;
+}
+
+.room-item__details__profile {
+  width: 3rem;
+  height: 3rem;
+  margin-right: 1rem;
+}
+
+.room-items__details__desc {
+  flex: 1;
+}
+
+.room-items__details__view-room {
+  color: var(--primary-3);
+}
+
+.room-items__details__croom {
+  color: #515b81;
+  cursor: pointer;
+}

@@ -31,6 +31,7 @@ export default async (app: Application) => {
             "/checkout",
             "/checkout/success",
             "/u/:username",
+            "/u/:username/spaces",
             "/u/:username/cart",
             "/u/:username/orders"
         ];

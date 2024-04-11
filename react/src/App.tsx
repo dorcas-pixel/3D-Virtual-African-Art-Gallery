@@ -1,5 +1,6 @@
 import Overview from "./Account/Overview"
 import Orders from "./Account/Orders"
+import Rooms from "./Account/Exhibitions"
 import SignIn from "./Auth/SignIn"
 import SignUp from "./Auth/SignUp"
 import Gallery from "./Gallery/Gallery"
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/u/:username" element={<Overview />}></Route>
         <Route path="/u/:username/cart" element={<Cart />}></Route>
         <Route path="/u/:username/orders" element={<Orders />}></Route>
+        <Route path="/u/:username/spaces" element={<Rooms />}></Route>
       </Routes>
     </Router>
   )

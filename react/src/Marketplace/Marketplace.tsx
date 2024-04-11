@@ -7,6 +7,7 @@ import { getQuery } from "../helpers/URL";
 import { postWithAuth } from "../helpers/http";
 import ArtItem from "../Components/ArtItem/ArtItem";
 import { Popup } from "../Cart/Cart";
+import ViewModel from "../Components/Modal/ViewModel";
 
 const getArtworks = async (kind: string): Promise<any> => {
   const res = await postWithAuth('/works/get/all', {
@@ -21,6 +22,7 @@ export default () => {
 
   const [works, setWorks] = useState([]);
   const [popupMsg, setPopupMsg] = useState('');
+  const [model, setModel] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -38,6 +40,14 @@ export default () => {
     setPopupMsg(msg);
   }
 
+  function openIn3D (artwork: any) {
+    setModel(artwork);
+  }
+
+  function close3D() {
+    setModel(null);
+  }
+
   return (
     <Session>
       <BaseHeader/>
@@ -50,10 +60,13 @@ export default () => {
           </ul>
 
           <div className="browse__works__list">
-            {works.map((artwork: any) => <ArtItem key={artwork._id} setPopupMessage={setPopupMessage} {...artwork} />)}
+            {works.map((artwork: any) => <ArtItem key={artwork._id} openIn3D={() => openIn3D(artwork)} setPopupMessage={setPopupMessage} {...artwork} />)}
           </div>
         </div>
       </div>
+
+      {model && <ViewModel close3D={close3D} {...(model as object)} />}
+
       { popupMsg && (
         <Popup clearPopup={clearPopup}>
           {popupMsg}

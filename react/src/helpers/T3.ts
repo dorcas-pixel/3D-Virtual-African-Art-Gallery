@@ -1,7 +1,7 @@
 import * as T3 from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { PointerLockControls } from "three/examples/jsm/Addons.js";
+import { PointerLockControls, OrbitControls } from "three/examples/jsm/Addons.js";
 import { getFramesByRoom, getStandsByRoom, setFramePortrait, setStandModel, updateArtworkPosition, updateArtworkScale } from "./artwork";
 import { BASEURL } from "./URL";
 
@@ -15,7 +15,7 @@ export default class T3Helper {
   public scene = new T3.Scene();
   public renderer = new T3.WebGLRenderer({ antialias: false });
   public camera: T3.PerspectiveCamera;
-  public controls: PointerLockControls;
+  public controls: PointerLockControls | OrbitControls;
   public stats = new Stats()
 
   public loader = new GLTFLoader();
@@ -59,6 +59,8 @@ export default class T3Helper {
   }
 
   lock(menu: HTMLElement) {
+    if (!(this.controls instanceof PointerLockControls)) return;
+
     this.controls.lock();
 
     this.controls.addEventListener("lock", () => (menu.style.display = "none"));
@@ -74,11 +76,20 @@ export default class T3Helper {
     );
   }
 
+  useOrbitalControls () {
+    this.controls = new OrbitControls(
+      this.camera,
+      this.renderer.domElement
+    );
+  }
+
   registerKey(e: any) {
     this.keys[e.code] = e.type == "keydown";
   }
 
   updateMovement() {
+    if (!(this.controls instanceof PointerLockControls)) return;
+
     if (this.keys["KeyW"] || this.keys["ArrowUp"]) {
       this.controls.moveForward(0.05);
     }
@@ -103,6 +114,8 @@ export default class T3Helper {
 
   setCameraPosition() {
     this.camera.position.set(0.2, 1.4, 8);
+
+    if (this.controls instanceof OrbitControls) (this.controls as OrbitControls).update()
   }
 
   isZOffset (rotation: number) {

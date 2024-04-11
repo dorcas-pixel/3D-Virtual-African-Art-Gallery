@@ -75,7 +75,7 @@ export default () => {
               </div>
 
               <p className="margin--top-2"><b>Description</b></p>
-              <p>{artwork.description}</p>
+              <p style={{ textAlign: 'justify' }}>{artwork.description}</p>
             </div>
           </div>
           

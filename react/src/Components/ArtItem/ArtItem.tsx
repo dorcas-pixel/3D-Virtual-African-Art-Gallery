@@ -25,7 +25,8 @@ export default (props: any) => {
 
           <div className="flex margin--top-1">
             <p className="art-items__details__view-art margin--right-2"><Link to={`/marketplace/${props._id}`}><i className="fa-solid fa-circle-question"></i> <span>See more</span></Link></p>
-            {!props.inProfile && (<p className="art-items__details__cart" onClick={() => addToCart(props._id)}><i className="fa-solid fa-cart-plus"></i> <span>Add to cart</span></p>)}
+            {!props.inProfile && (<p className="art-items__details__cart margin--right-2" onClick={() => addToCart(props._id)}><i className="fa-solid fa-cart-plus"></i> <span>Add to cart</span></p>)}
+            {props.kind == 'model' && (<p className="hover" onClick={props.openIn3D}><i className="fa-solid fa-cube margin--right-1"></i>View in 3D</p>)}
           </div>
         </div>
       </div>

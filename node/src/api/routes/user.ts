@@ -16,4 +16,10 @@ export default (app: Application) => {
     "/user/get/by/session",
     BaseController.wrapWithUser(userService.getUserSession)
   );
+
+  app.post(
+    "/user/get/by/username",
+    BaseController.wrap(userService.getUserByUsername)
+  );
+  
 };

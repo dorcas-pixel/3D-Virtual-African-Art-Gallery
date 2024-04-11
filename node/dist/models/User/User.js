@@ -27,6 +27,11 @@ class User extends Model_1.default {
             condition: { _id: id }
         });
     }
+    getByUsername(username) {
+        return this.model.findOne({
+            condition: { username }
+        });
+    }
 }
 exports.default = User;
 //# sourceMappingURL=User.js.map

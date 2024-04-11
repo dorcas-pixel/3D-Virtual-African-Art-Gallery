@@ -95,6 +95,11 @@ export default (app: Application) => {
     baseController.wrapWithUser(artWorkService.getAllByUser)
   );
 
+  app.post(
+    "/works/get/all/by/artist/username",
+    baseController.wrap(artWorkService.getAllByUsername)
+  );
+
   app.post("/works/get/all", baseController.wrap(artWorkService.getAll));
 
   app.post(

@@ -28,4 +28,10 @@ export default class User extends Model {
       condition: { _id: id }
     })
   }
+
+  getByUsername(username: string) {
+    return this.model.findOne({
+      condition: { username }
+    })
+  }
 }

@@ -1,12 +1,11 @@
 import Artwork from "../models/Artwork";
-import Room from "../models/Room";
+import User from "../models/User";
 
 import v from "../helpers/Validation";
 import { makeId } from "../helpers/String";
 
 import { IAny, IResponse } from "../interfaces";
 import { Types } from "mongoose";
-import RoomServices from "./Room";
 
 export default class ArtWorkServices {
   static async getNotReadyOrMakeNew(
@@ -53,6 +52,33 @@ export default class ArtWorkServices {
       else
         this['works'] = await Artwork.getAllReadyByUserAndKind(
           userInfo._id,
+          kind
+        );
+
+      this['successful'] = true;
+
+      return this as unknown as IResponse;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  static async getAllByUsername(
+    body: IAny
+  ): Promise<IResponse> {
+    const { kind, username } = body;
+
+    try {
+      this['works'] = [];
+
+      const user = await User.getByUsername(username);
+
+      if (!user) return this as unknown as IResponse;;
+
+      if (!kind) this['works'] = await Artwork.getAllReadyByUser(user._id);
+      else
+        this['works'] = await Artwork.getAllReadyByUserAndKind(
+          user._id,
           kind
         );
 

@@ -42,7 +42,7 @@ async function createLocalUserAccount(body: any): Promise<IResponse> {
     saveSession.call(this, removePassword(newUser.toJSON()));
 
     this.successful = true;
-    this.username = body.username;
+    this.user = newUser.toObject();
   } catch (error) {
     throw error;
   }
@@ -61,7 +61,7 @@ async function authLocalUserAccount(body: any): Promise<IResponse> {
     saveSession.call(this, removePassword(user.toJSON()));
 
     this.successful = true;
-    this.username = user.username;
+    this.user = user.toObject();
   } catch (error) {
     throw error;
   }
@@ -74,4 +74,12 @@ async function getUserSession(_, user: IAny): Promise<IResponse> {
   return this;
 }
 
-export default { getUserSession, createLocalUserAccount, authLocalUserAccount };
+async function getUserByUsername(body: IAny): Promise<IResponse> {
+  const user = await User.getByUsername(body.username);
+
+  this.user = user;
+
+  return this;
+}
+
+export default { getUserSession, createLocalUserAccount, authLocalUserAccount, getUserByUsername };
