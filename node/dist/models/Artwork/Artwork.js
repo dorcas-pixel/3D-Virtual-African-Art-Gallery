@@ -50,7 +50,7 @@ class Artwork extends Model_1.default {
         condition: { room, kind, isDeleted: false, isReady: true },
     });
     getById = (_id, select = "") => this.model.findOne({
-        condition: { _id, isDeleted: false, isReady: true },
+        condition: { _id, isReady: true },
         select,
         populate: [["user", "-password"], ['room', 'uniqueId']],
     });

@@ -43,6 +43,16 @@ class CartServices {
             throw e;
         }
     }
+    static async removeAllItems(body, userInfo) {
+        try {
+            await Cart_1.default.removeAllByUser(userInfo._id);
+            this['successful'] = true;
+            return this;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
 }
 exports.default = CartServices;
 //# sourceMappingURL=Cart.js.map

@@ -85,6 +85,26 @@ class ArtWorkServices {
             throw e;
         }
     }
+    // static async updateArtworkScale(wrapRes: IResponse, body: IAny) {
+    //   try {
+    //     Artwork.updateDetails(body.artworkId, {
+    //       "model.scale": body.scale,
+    //     });
+    //     return wrapRes;
+    //   } catch (e) {
+    //     throw e;
+    //   }
+    // }
+    static async removeById(body) {
+        try {
+            await Artwork_1.default.delete(body.artworkId);
+            this['successful'] = true;
+            return this;
+        }
+        catch (e) {
+            throw e;
+        }
+    }
 }
 exports.default = ArtWorkServices;
 //# sourceMappingURL=Artwork.js.map

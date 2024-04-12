@@ -1,0 +1,11 @@
+Model Information:
+* title:	African wooden figurine
+* source:	https://sketchfab.com/3d-models/african-wooden-figurine-407610fac49742a1817506ef81d2b9db
+* author:	Piotr Lezanski (https://sketchfab.com/lezak)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "African wooden figurine" (https://sketchfab.com/3d-models/african-wooden-figurine-407610fac49742a1817506ef81d2b9db) by Piotr Lezanski (https://sketchfab.com/lezak) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

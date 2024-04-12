@@ -40,6 +40,12 @@ export default () => {
     setWorks(res.works);
   }
 
+  async function clearCart () {
+    await postWithAuth('/cart/remove/all', { })
+
+    await setCartItems();
+  }
+
   useEffect(() => {
     (async () => {
       await setCartItems()
@@ -65,7 +71,7 @@ export default () => {
                 <tr key={item._id}>
                   <td>
                     <span className="flex flex--a-center">
-                      <span className="cart__list__image image--back margin--right-1" style={{backgroundImage: `url("${BASEURL()}/assets/uploads/artwork/portraits/${item.artwork.image}")`}}></span>
+                      <span className="cart__list__image image--back margin--right-1" style={{backgroundImage: `url("${BASEURL()}/assets/uploads/artwork/${item.artwork.kind == 'portrait' ? 'portraits' : 'thumbnails'}/${item.artwork.image}")`}}></span>
                       <span>
                         <b>{item.artwork.name}</b><br />
                         <span onClick={() => removeItem(item._id)}>remove</span>
@@ -81,7 +87,7 @@ export default () => {
         </div>
         <div className="cart__buttons margin--top-2">
           <Link to="/checkout" className="btn btn--primary margin--right-2">Check out</Link>
-          <button className="btn">Clear</button>
+          <button className="btn" onClick={clearCart}>Clear</button>
         </div>
       </div>
     </Session>

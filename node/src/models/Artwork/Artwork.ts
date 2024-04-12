@@ -62,7 +62,7 @@ export default class Artwork extends Model {
 
   getById = (_id: Types.ObjectId | string, select: string = "") =>
     this.model.findOne({
-      condition: { _id, isDeleted: false, isReady: true },
+      condition: { _id, isReady: true },
       select,
       populate: [["user", "-password"], ['room', 'uniqueId']],
     });

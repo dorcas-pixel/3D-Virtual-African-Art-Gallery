@@ -26,3 +26,17 @@
   color: #515b81;
   cursor: pointer;
 }
+
+.art-item__background{
+  position: relative;  
+}
+
+.art-item__details__remove{
+  position: absolute;
+  bottom: .7rem;
+  right: 1rem;
+  background-color: #ffffff61;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}

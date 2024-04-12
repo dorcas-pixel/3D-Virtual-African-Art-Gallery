@@ -51,4 +51,16 @@ export default class CartServices {
       throw e;
     }
   }
+
+  static async removeAllItems(body: IAny, userInfo: IAny): Promise<IResponse>{
+    try {
+      await Cart.removeAllByUser(userInfo._id)
+
+      this['successful'] = true;
+
+      return this as unknown as IResponse;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

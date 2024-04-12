@@ -1,0 +1,11 @@
+Model Information:
+* title:	African Figurine
+* source:	https://sketchfab.com/3d-models/african-figurine-12b110832c844b83aa7b74436e919cfe
+* author:	Moshe Caine (https://sketchfab.com/mosheca)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "African Figurine" (https://sketchfab.com/3d-models/african-figurine-12b110832c844b83aa7b74436e919cfe) by Moshe Caine (https://sketchfab.com/mosheca) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

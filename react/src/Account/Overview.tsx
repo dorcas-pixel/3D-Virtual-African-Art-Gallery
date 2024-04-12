@@ -82,7 +82,18 @@ export default () => {
   const uploadModelFile = async () => {
     const data = addInputFile('model-file', 'model');
 
-    const res = await postWithAxios(`/model/add/file`, data)
+    const res = await postWithAxios(`/model/add/file`, data, {
+      progress: (e: any) => {
+        const progress = Math.round((e.loaded * 100) / e.total)
+
+        const elem = getElementById('progress-perc')
+
+        elem.classList.remove('hide')
+
+        if (progress < 95) elem.innerText = `${progress}% Complete`
+        else setTimeout(() => elem.innerText = `${progress}% Complete`, 2000)
+      }
+    })
 
     if (res.error)
       showError('model', res.error);
@@ -127,6 +138,12 @@ export default () => {
     showError('model', res.error);
   }
 
+  const removeArtwork = async (artworkId: string) => {
+    await postWithAuth('/works/remove', { artworkId })
+
+    await setArtwork();
+  }
+
   function openIn3D (artwork: any) {
     setModel(artwork);
   }
@@ -156,7 +173,7 @@ export default () => {
           </div>
 
           <div className="account__works__list">
-            {works.map((artwork: any) => <ArtItem openIn3D={() => openIn3D(artwork)} inProfile={true} key={artwork._id} {...artwork}/>)}
+            {works.map((artwork: any) => <ArtItem isOwner={user && currentUser && user.email == currentUser.email} removeArtwork={removeArtwork} openIn3D={() => openIn3D(artwork)} inProfile={true} key={artwork._id} {...artwork}/>)}
             
             {
               user && currentUser && user.email == currentUser.email ?

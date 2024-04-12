@@ -37,7 +37,7 @@ export default (props: any) => {
             </div>
 
             <input type="file" id="model-file" onChange={props.uploadModelFile} hidden />
-            <label className="margin--top-1 hover" htmlFor="model-file" style={{ display: 'inline-block' }}><i className="fa-solid fa-circle-info margin--right-1"></i>Select model zip</label>
+            <label className="margin--top-1 hover flex flex--a-center flex--j-space-between" htmlFor="model-file"><span><i className="fa-solid fa-circle-info margin--right-1"></i>Select model zip</span> <span className="hide" id="progress-perc">0% Complete</span></label>
           </div>
         </div>
         <div className="modal__main__footer flex">

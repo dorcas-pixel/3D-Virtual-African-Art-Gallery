@@ -16,9 +16,17 @@ export default (props: any) => {
 
   return (
     <div className="art-item">
-      <div className="art-item__background image--back" style={{ backgroundImage: `url("${imagePath}")` }}></div>
+      <div className="art-item__background image--back" style={{ backgroundImage: `url("${imagePath}")` }}>
+        {
+          props.isOwner && props.inProfile && (<div className="art-item__details__remove hover" onClick={() => props.removeArtwork(props._id)}>
+            <i className="pos--abs pos--center fa-regular fa-trash-can"  style={{ color: '#770000' }}></i>
+          </div>)
+        }
+      </div>
       <div className="art-item__details flex">
-        <div className="art-item__details__profile image--back image--round" style={{backgroundImage: 'url("/profiles/2023/10/23/blank.jpg")'}}></div>
+        <div className="art-item__details__profile image--back image--round" style={{backgroundImage: 'url("/profiles/2023/10/23/blank.jpg")'}}>
+          
+        </div>
         <div className="art-items__details__desc">
           <p className="flex flex--j-space-between"><b>{props.name}</b> <span>R{props.price}</span></p>
           <p>{props.user.fullname}</p>

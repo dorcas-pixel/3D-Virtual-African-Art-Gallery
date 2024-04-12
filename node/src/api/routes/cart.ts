@@ -18,4 +18,9 @@ export default (app: Application) => {
     "/cart/remove",
     baseController.wrapWithUser(cartServices.removeItem)
   );
+
+  app.post(
+    "/cart/remove/all",
+    baseController.wrapWithUser(cartServices.removeAllItems)
+  );
 };

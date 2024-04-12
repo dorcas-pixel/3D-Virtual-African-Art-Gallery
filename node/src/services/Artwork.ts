@@ -125,17 +125,15 @@ export default class ArtWorkServices {
   //   }
   // }
 
-  // static async removeById(wrapRes: IResponse, body: IAny): Promise<IResponse> {
-  //   try {
-  //     wrapRes.art = await Artwork.getById(body.id);
+  static async removeById(body: IAny): Promise<IResponse> {
+    try {
+      await Artwork.delete(body.artworkId);
 
-  //     Artwork.delete(body.id);
+      this['successful'] = true;
 
-  //     wrapRes.successful = true;
-
-  //     return wrapRes;
-  //   } catch (e) {
-  //     throw e;
-  //   }
-  // }
+      return this as unknown as IResponse;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

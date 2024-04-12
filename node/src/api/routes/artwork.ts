@@ -102,6 +102,8 @@ export default (app: Application) => {
 
   app.post("/works/get/all", baseController.wrap(artWorkService.getAll));
 
+  app.post('/works/remove', baseController.wrap(artWorkService.removeById))
+
   app.post(
     "/works/get/featured",
     baseController.wrap(artWorkService.getFeatured)
