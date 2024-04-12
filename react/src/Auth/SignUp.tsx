@@ -23,8 +23,10 @@ export default () => {
       passwordAgain: getValueById('password-again'),
     }, true)
 
-    setUsername(res.user.username);
-    rememberUser(res.user)
+    if (res.successful) {
+      setUsername(res.user.username);
+      rememberUser(res.user)
+    }
 
     if (res.error) showError('auth', res.error);
   }
