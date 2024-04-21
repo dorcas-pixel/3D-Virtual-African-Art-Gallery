@@ -33,7 +33,8 @@ export default async (app: Application) => {
             "/u/:username",
             "/u/:username/spaces",
             "/u/:username/cart",
-            "/u/:username/orders"
+            "/u/:username/orders",
+            "/u/:username/profile"
         ];
 
         app.get(routes, function (_, res) {

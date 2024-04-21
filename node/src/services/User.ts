@@ -3,6 +3,7 @@ import User from "../models/User";
 import v from "../helpers/Validation";
 import hasher from "../helpers/Hasher";
 import jwt from "../helpers/Jwt";
+import { getResponse } from "../helpers/response-wrap";
 
 import { IAny, IResponse } from "../interfaces";
 
@@ -68,6 +69,50 @@ async function authLocalUserAccount(body: any): Promise<IResponse> {
   return this;
 }
 
+async function updateBasicInfo(body: any, user: any): Promise<IResponse> {
+  try {
+    const {fullname, username, email} = body;
+
+    if (await User.exists({ email, _id: { $ne: user._id } })) throw 'Email address already exists'
+
+    await User.updateDetails(user._id, {
+      fullname,
+      username,
+      email
+    })
+
+    const _user = await User.getById(user._id)
+
+    saveSession.call(this, removePassword(_user.toJSON()));
+
+    this.successful = true;
+    this.user = _user.toObject();
+  } catch (error) {
+    throw error;
+  }
+  return this;
+}
+
+async function updateProfile (body: IAny, req: IAny, res: any): Promise < void> {
+  try {
+    if(!req.files[0]) throw "Please upload profile photo";
+
+    await User.updateDetails(req.store.userInfo._id, {
+      picture: req.files[0].filename
+    })
+
+    req.store.userInfo.picture = req.files[0].filename;
+    delete req.store.userInfo.iat;
+    delete req.store.userInfo.exp;
+
+    saveSession.call(getResponse(res), req.store.userInfo);
+
+    req.success = true;
+  } catch(e) {
+    throw e;
+  }
+}
+
 async function getUserSession(_, user: IAny): Promise<IResponse> {
   this.user = user;
 
@@ -82,4 +127,4 @@ async function getUserByUsername(body: IAny): Promise<IResponse> {
   return this;
 }
 
-export default { getUserSession, createLocalUserAccount, authLocalUserAccount, getUserByUsername };
+export default { getUserSession, updateBasicInfo, updateProfile, createLocalUserAccount, authLocalUserAccount, getUserByUsername };

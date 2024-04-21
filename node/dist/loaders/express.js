@@ -30,7 +30,8 @@ exports.default = async (app) => {
             "/u/:username",
             "/u/:username/spaces",
             "/u/:username/cart",
-            "/u/:username/orders"
+            "/u/:username/orders",
+            "/u/:username/profile"
         ];
         app.get(routes, function (_, res) {
             res.sendFile(path_1.default.join(__dirname, '../../../react/dist', 'index.html'));

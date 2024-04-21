@@ -38,7 +38,6 @@ exports.default = (app) => {
     }));
     app.post("/model/add/file", (req, res, next) => {
         (0, multer_1.anyFiles)("./public/assets/uploads/artwork/models", "zip")(req, res, async (err) => {
-            console.log('Model upload error', err);
             await Model_1.default.addModelFile(req.body, req);
             next();
         });
