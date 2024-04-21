@@ -73,6 +73,7 @@ export const postWithAxios = async (url: string, body: any, options?: any) => {
       Authorization: `Bearer ${getCookieValue("_gallery_sesh")}`,
     },
     onUploadProgress: options?.progress,
+    withCredentials: options?.credentials || false
   });
 
   return res.data;

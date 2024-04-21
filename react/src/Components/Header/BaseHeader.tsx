@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { postWithAuth } from "../../helpers/http";
 
 import "./header.css"
+import { BASEURL } from "../../helpers/URL";
 
 export default () => {
   const { user } = useContext(AuthContext);
@@ -45,7 +46,7 @@ export default () => {
               <span><b>{user.fullname}</b></span><br />
               <span>@{user.username}</span>
             </p>
-            <div className="header__user__profile image--back image--round" style={{ backgroundImage: 'url("/profiles/2023/10/23/blank.jpg")' }}></div>
+              <div className="header__user__profile image--back image--round" style={{ backgroundImage: `url("${BASEURL()}/assets/uploads/profile/${user.picture}")` }}></div>
           </>
           ) : 
           (

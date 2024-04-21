@@ -234,11 +234,11 @@ export function UserOverview () {
   return (!user) ? 
     (<p>Loading</p>) : (
     <div className="account__user flex">
-      <div className="account__user__profile image--back image--round" style={{ backgroundImage: 'url("/profiles/2023/10/23/blank.jpg")' }}></div>
+      <div className="account__user__profile image--back image--round" style={{ backgroundImage: `url("${BASEURL()}/assets/uploads/profile/${_user?.picture}")` }}></div>
       <h2 className="account__user__name">{_user?.fullname}</h2>
       <p>Artist</p>
 
-      {user.email == _user?.email && (<button className="btn btn--primary">Edit profile</button>) }
+      {user.email == _user?.email && (<Link to={`/u/${_user?.username}/profile`}><button className="btn btn--primary">Edit profile</button></Link>) }
   </div>
   )
 }

@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import AccountHeader from "../Components/Header/AccountHeader"
-import Authenticator, { AuthContext } from "../Auth/Authenticator"
+import Authenticator from "../Auth/Authenticator"
 
 import "./account.css"
 import { postWithAuth } from "../helpers/http"
 import { formatTime } from "../helpers/date"
+import { UserOverview } from "./Profile"
 
 export default () => {
   console.log('Rendering Orders');
@@ -88,18 +89,5 @@ export default () => {
         </div>
       </main>
     </Authenticator>
-  )
-}
-
-function UserOverview() {
-  const { user } = useContext(AuthContext);
-
-  return (
-    <div className="account__user flex">
-      <div className="account__user__profile image--back image--round" style={{ backgroundImage: 'url("/profiles/2023/10/23/blank.jpg")' }}></div>
-      <h2 className="account__user__name">{user.fullname}</h2>
-      <p>Artist</p>
-      <button className="btn btn--primary">Edit profile</button>
-    </div>
   )
 }

@@ -24,7 +24,7 @@ export default (props: any) => {
         }
       </div>
       <div className="art-item__details flex">
-        <div className="art-item__details__profile image--back image--round" style={{backgroundImage: 'url("/profiles/2023/10/23/blank.jpg")'}}>
+        <div className="art-item__details__profile image--back image--round" style={{ backgroundImage: `url("${BASEURL()}/assets/uploads/profile/${props.user.picture}")`}}>
           
         </div>
         <div className="art-items__details__desc">

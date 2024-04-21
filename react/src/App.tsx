@@ -9,6 +9,7 @@ import ProductView from "./Marketplace/ProductView"
 import Cart from "./Cart/Cart"
 import Checkout from "./Cart/Checkout"
 import CheckoutSuccess from "./Cart/CheckoutSuccess"
+import Profile from "./Account/Profile"
 import Home from "./Home/Home"
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/u/:username/cart" element={<Cart />}></Route>
         <Route path="/u/:username/orders" element={<Orders />}></Route>
         <Route path="/u/:username/spaces" element={<Rooms />}></Route>
+        <Route path="/u/:username/profile" element={<Profile />}></Route>
       </Routes>
     </Router>
   )
