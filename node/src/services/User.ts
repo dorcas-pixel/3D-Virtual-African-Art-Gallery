@@ -73,7 +73,14 @@ async function updateBasicInfo(body: any, user: any): Promise<IResponse> {
   try {
     const {fullname, username, email} = body;
 
+    v.validate({
+      'Full name': { value: fullname, min: 3, max: 50 },
+      'Username': { value: username, min: 3, max: 50 },
+      'Email address': { value: email, min: 3, max: 50 }
+    });
+
     if (await User.exists({ email, _id: { $ne: user._id } })) throw 'Email address already exists'
+    if (await User.exists({ username, _id: { $ne: user._id } })) throw 'Username already exists'
 
     await User.updateDetails(user._id, {
       fullname,

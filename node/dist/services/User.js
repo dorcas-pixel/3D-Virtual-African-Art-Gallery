@@ -64,8 +64,15 @@ async function authLocalUserAccount(body) {
 async function updateBasicInfo(body, user) {
     try {
         const { fullname, username, email } = body;
+        Validation_1.default.validate({
+            'Full name': { value: fullname, min: 3, max: 50 },
+            'Username': { value: username, min: 3, max: 50 },
+            'Email address': { value: email, min: 3, max: 50 }
+        });
         if (await User_1.default.exists({ email, _id: { $ne: user._id } }))
             throw 'Email address already exists';
+        if (await User_1.default.exists({ username, _id: { $ne: user._id } }))
+            throw 'Username already exists';
         await User_1.default.updateDetails(user._id, {
             fullname,
             username,

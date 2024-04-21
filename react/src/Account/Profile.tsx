@@ -10,13 +10,14 @@ import { id } from "../helpers/string"
 import { useNavigate } from "react-router-dom"
 import { BASEURL } from "../helpers/URL"
 import { addInputFile } from "../helpers/inputs"
+import { showError } from "../helpers/error"
 
 export default () => {
   console.log('Rendering Profile');
 
   const nav = useNavigate();
 
-  async function updateUserInfo(e: any) {
+  async function updateUserInfo (e: any) {
     e.preventDefault();
 
     const res = await postWithAuth('/user/update/details', {
@@ -32,6 +33,8 @@ export default () => {
 
       window.location.reload();
     }
+
+    else if (res.error) showError('update', res.error);
   }
 
   return (
@@ -45,24 +48,35 @@ export default () => {
             <p>Edit details</p>
           </div>
 
-          <form onSubmit={updateUserInfo}>
-            <div className="input">
-              <input type="text" id="fullname" placeholder="Full name" />
-            </div>
-
-            <div className="input margin--top-1">
-              <input type="text" id="username" placeholder="Username" />
-            </div>
-
-            <div className="input margin--top-1">
-              <input type="email" id="email-address" placeholder="Email address" />
-            </div>
-
-            <button className="btn btn--primary margin--top-2">Update details</button>
-          </form>
+          <UserForm updateUserInfo={updateUserInfo} />
         </div>
       </main>
     </Authenticator>
+  )
+}
+
+function UserForm (props: any) {
+  const { user } = useContext(AuthContext);
+
+  return (
+    <form onSubmit={props.updateUserInfo}>
+      <div id="update-error" className="error hide">
+        <p><b>Sorry, </b><span className="error-msg"></span></p>
+      </div>
+      <div className="input">
+        <input type="text" id="fullname" placeholder="Full name" defaultValue={user?.fullname} />
+      </div>
+
+      <div className="input margin--top-1">
+        <input type="text" id="username" placeholder="Username" defaultValue={user?.username} />
+      </div>
+
+      <div className="input margin--top-1">
+        <input type="email" id="email-address" placeholder="Email address" defaultValue={user?.email} />
+      </div>
+
+      <button className="btn btn--primary margin--top-2">Update details</button>
+    </form>
   )
 }
 
